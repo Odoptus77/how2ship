@@ -14,7 +14,7 @@ cd ios
 ./generate.sh                # erzeugt Paketlotse.xcodeproj (legt beim 1. Mal Config/Secrets.xcconfig an)
 open Paketlotse.xcodeproj    # Simulator wählen (z. B. iPhone 15) → ⌘R
 ```
-Die `.xcodeproj` wird nicht eingecheckt. **Nach jedem `git pull` erneut `./generate.sh` ausführen**, sonst fehlen neue Dateien im Projekt (Fehler „Cannot find … in scope“).
+Die `.xcodeproj` wird nicht eingecheckt. Nach dem ersten `./generate.sh` wird das Projekt **nach jedem `git pull` automatisch neu erzeugt** (Git-Hook in `.githooks/`). Taucht trotzdem „Cannot find … in scope“ auf, einfach `./generate.sh` ausführen.
 
 **Signing:** Trag deine Team-ID einmalig in `Config/Secrets.xcconfig` ein (`DEVELOPMENT_TEAM = …`). Du findest sie in Xcode unter *Einstellungen → Accounts* oder auf developer.apple.com unter *Membership*. Dann bleibt das Team auch nach dem Neugenerieren erhalten.
 

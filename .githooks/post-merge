@@ -1,0 +1,6 @@
+#!/bin/sh
+# Nach jedem `git pull`: Xcode-Projekt neu erzeugen, damit neue Dateien enthalten sind.
+if command -v xcodegen >/dev/null 2>&1 && [ -f ios/Config/Secrets.xcconfig ]; then
+  echo "▶︎ Paketlotse: Xcode-Projekt wird neu erzeugt …"
+  (cd ios && xcodegen generate --quiet) && echo "✓ Paketlotse.xcodeproj aktualisiert"
+fi

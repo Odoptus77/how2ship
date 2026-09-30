@@ -7,3 +7,9 @@ if [ ! -f Config/Secrets.xcconfig ]; then
   echo "⚠️  Config/Secrets.xcconfig angelegt – bitte DEVELOPMENT_TEAM eintragen und erneut ausführen."
 fi
 xcodegen generate
+
+# Einmalig: Git-Hooks aktivieren, die das Projekt nach jedem `git pull` automatisch neu erzeugen.
+if [ "$(git config core.hooksPath)" != ".githooks" ]; then
+  git -C .. config core.hooksPath .githooks
+  echo "✓ Automatisches Neu-Erzeugen nach git pull aktiviert"
+fi

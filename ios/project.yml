@@ -5,6 +5,8 @@ options:
   deploymentTarget:
     iOS: "17.0"
   developmentLanguage: de
+  # Unterdrückt Xcodes Hinweis „Update to recommended settings“ (Projekt wird ohnehin generiert).
+  xcodeVersion: "26.0"
 
 packages:
   PaketlotseCore:

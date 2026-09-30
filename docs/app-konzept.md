@@ -336,10 +336,12 @@ Sie **kostet** ca. 0,03 bis 0,04 € pro Sendung. Das ist durch A und C gedeckt.
 
 ## 8. Technische Architektur
 
+*Code: [`ios/`](../ios/README.md). Die Entscheidung für Swift statt Flutter fiel am 30.09.2026: iOS zuerst, Android später.*
+
 ```
-┌──────────────────────── App (Flutter) ─────────────────────────┐
+┌──────────────────── App (Swift / SwiftUI) ─────────────────────┐
 │  UI  ·  Tarif-Engine (offline, JSON-Regeln)  ·  Barcode-Scan   │
-│  AR-Modul: ARKit (iOS, nativ) / ARCore (Android, nativ)        │
+│  AR-Modul: ARKit (LiDAR) · Barcode: VisionKit                  │
 │  Lokale DB (Sendungen, Größen)  ·  Ads-SDK  ·  In-App-Kauf     │
 └──────────────┬─────────────────────────────────────────────────┘
                │ HTTPS
@@ -354,9 +356,9 @@ Sie **kostet** ca. 0,03 bis 0,04 € pro Sendung. Das ist durch A und C gedeckt.
 
 | Baustein | Empfehlung | Begründung |
 |---|---|---|
-| App | **Flutter** (eine Codebasis für iOS und Android) | Schnelle Entwicklung, gute Kamera- und Barcode-Plugins |
-| AR-Vermessung | Native Module (ARKit mit LiDAR bzw. ARCore) über Platform Channels | Beste Genauigkeit, kein Kompromiss durch plattformübergreifende AR |
-| Barcode-Scan | Google ML Kit bzw. Apple Vision | Offline, schnell, kostenlos |
+| App | **Swift / SwiftUI, nativ für iOS (ab iOS 17)**. Android folgt später. | Beste Qualität bei Kamera, AR, Live Activities und Widgets. Die Kernlogik liegt im Swift-Package `PaketlotseCore` und ist getestet. |
+| AR-Vermessung | ARKit, auf LiDAR-Geräten mit Scene Depth | Beste Genauigkeit |
+| Barcode-Scan | VisionKit (`DataScannerViewController`) | Offline, schnell, kostenlos |
 | Backend | Supabase oder Firebase (Region EU) mit Serverless Functions | Wenig Betriebsaufwand, Auth, Datenbank und Push aus einer Hand |
 | Tarifdaten | Versionierte JSON-Dateien mit Admin-Oberfläche und Tests je Tarif | Ohne App-Update aktualisierbar, Fehler werden früh erkannt |
 | Karten | Apple Maps / Google Maps SDK, Standortdaten der Paketdienste bzw. OpenStreetMap | Standard |

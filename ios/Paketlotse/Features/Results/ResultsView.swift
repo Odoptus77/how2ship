@@ -7,27 +7,18 @@ struct ResultsView: View {
 
     @Environment(AppStore.self) private var store
     @Environment(\.openURL) private var openURL
-    @State private var includeShopPrices = false
+    @State private var sortOrder: OfferSortOrder = .price
     @State private var showMethodology = false
 
-    private var channels: Set<SalesChannel> {
-        includeShopPrices ? [.online, .shop] : [.online]
-    }
-
     var body: some View {
-        let offers = store.engine.offers(for: parcel, requirements: requirements, channels: channels)
-        let tip = store.advisor.bestTip(for: parcel, requirements: requirements, channels: channels)
+        let offers = store.engine.offers(for: parcel, requirements: requirements).sorted(by: sortOrder)
+        let tip = store.advisor.bestTip(for: parcel, requirements: requirements)
 
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
                 parcelSummary
 
                 if store.catalog.isSample { SampleDataBanner() }
-
-                Toggle("Auch Filialpreise zeigen", isOn: $includeShopPrices)
-                    .font(.lotse(14, .semibold))
-                    .tint(Theme.primary)
-                    .card()
 
                 if let tip { SavingsTipCard(tip: tip) }
 
@@ -41,6 +32,7 @@ struct ResultsView: View {
                     )
                 } else {
                     SectionHeader(title: "\(offers.count) passende Angebote")
+                    sortPicker
                     ForEach(offers) { offer in
                         OfferCard(offer: offer) { book(offer) }
                     }
@@ -49,7 +41,7 @@ struct ResultsView: View {
                 Button {
                     showMethodology = true
                 } label: {
-                    Text("Sortiert nach Gesamtpreis. Bei manchen Buchungen erhalten wir eine Provision – die Reihenfolge beeinflusst das nicht. **So vergleichen wir**")
+                    Text("Sortiert nach \(sortOrder == .price ? "Gesamtpreis" : "Versicherungssumme"). Bei manchen Buchungen erhalten wir eine Provision – die Reihenfolge beeinflusst das nicht. **So vergleichen wir**")
                         .font(.lotse(12))
                         .foregroundStyle(Theme.textSecondary)
                         .multilineTextAlignment(.leading)
@@ -62,6 +54,23 @@ struct ResultsView: View {
         .navigationTitle("Angebote")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showMethodology) { MethodologyView() }
+    }
+
+    private var sortPicker: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                Label("Sortieren", systemImage: "arrow.up.arrow.down")
+                    .font(.lotse(13, .semibold))
+                    .foregroundStyle(Theme.textSecondary)
+                ForEach(OfferSortOrder.allCases) { order in
+                    Chip(title: order.displayName, isSelected: sortOrder == order) {
+                        withAnimation(.easeInOut(duration: 0.25)) { sortOrder = order }
+                    }
+                }
+            }
+            .padding(.vertical, 6)
+            .padding(.horizontal, 2)
+        }
     }
 
     private var parcelSummary: some View {
@@ -133,6 +142,9 @@ struct OfferCard: View {
                     if offer.badges.contains(.cheapest) {
                         Tag(text: "Günstigster", tint: .white, background: Theme.accent)
                     }
+                    if offer.badges.contains(.bestLiability) {
+                        Tag(text: "Beste Haftung", systemImage: "shield.fill", tint: .white, background: Theme.primary)
+                    }
                 }
             }
 
@@ -141,7 +153,6 @@ struct OfferCard: View {
                     if tariff.delivery == .shop {
                         Tag(text: "Zustellung in PaketShop", systemImage: "storefront", tint: Theme.accent, background: Theme.accentSoft)
                     }
-                    Tag(text: tariff.channel == .online ? "Online" : "Filiale")
                     if tariff.hasTracking { Tag(text: "Sendungsverfolgung", systemImage: "location") }
                     if let insurance = offer.insurance, let coverage = insurance.coverageEuro {
                         Tag(text: "Versichert bis \(coverage.formatted(.number.locale(Locale(identifier: "de_DE")))) €", systemImage: "checkmark.shield", tint: Theme.primary)
@@ -155,7 +166,6 @@ struct OfferCard: View {
                     if !tariff.hasTracking {
                         Tag(text: "Ohne Sendungsverfolgung", systemImage: "location.slash")
                     }
-                    if offer.badges.contains(.bestLiability) { Tag(text: "Beste Haftung", tint: Theme.primary) }
                     ForEach(tariff.dropOff, id: \.self) { Tag(text: $0.displayName) }
                 }
             }
@@ -262,7 +272,7 @@ struct MethodologyView: View {
                     .font(.lotse(24, .bold))
                 Text("""
                 • Wir zeigen alle Tarife, in die dein Paket nach den Regeln des jeweiligen Paketdienstes passt.
-                • Sortiert wird ausschließlich nach dem Gesamtpreis inkl. MwSt.
+                • Standardmäßig sortieren wir nach dem Gesamtpreis inkl. MwSt. und gewählter Zusatzleistungen. Alternativ kannst du nach der Versicherungssumme sortieren.
                 • Pro Produktlinie zeigen wir das günstigste passende Produkt.
                 • Bei manchen Buchungen erhalten wir eine Provision von Partnern. Das beeinflusst die Reihenfolge nicht.
                 • Alle Angaben ohne Gewähr. Maßgeblich sind die Bedingungen des Paketdienstes.

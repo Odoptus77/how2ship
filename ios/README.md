@@ -70,7 +70,7 @@ Orientiert an der Referenz „Job Finder UI Kit“:
 |---|---|
 | Maße und Gewicht eingeben, Schnellauswahl | ✅ |
 | Tarifvergleich mit den Messregeln aller Paketdienste, **echte Privatkundenpreise 2026** (DHL, Hermes, DPD, GLS, UPS), Zustellung Haustür vs. PaketShop, Gurtmaß für XL | ✅ Stand 30.09.2026 |
-| Spar-Tipp, Hinweis „knapp an der Grenze“, Badges | ✅ |
+| Spar-Tipp, Hinweis „knapp an der Grenze“, Sticker „Günstigster“ und „Beste Haftung“, Sortierung nach Preis oder Versicherungssumme | ✅ |
 | Zusatzleistungen (Versicherung mit Warenwert, Sendungsverfolgung, Abholung, Unterschrift, Packstation) im Preis und als Filter | ✅ (Beispielpreise) |
 | „Jetzt buchen“: öffnet extern, merkt sich die offene Buchung | ✅ |
 | **Abfrage der Sendungsnummer** bei Rückkehr (ab 60 s, bis 48 h, einmalig) | ✅ |

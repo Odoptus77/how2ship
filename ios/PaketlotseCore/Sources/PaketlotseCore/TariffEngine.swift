@@ -78,3 +78,35 @@ public struct TariffEngine: Sendable {
         }
     }
 }
+
+/// Sortierung der Ergebnisliste. Standard ist der Gesamtpreis (Ranking-Transparenz, § 5b UWG).
+public enum OfferSortOrder: String, CaseIterable, Identifiable, Sendable {
+    case price
+    case coverage
+
+    public var id: String { rawValue }
+
+    public var displayName: String {
+        switch self {
+        case .price: "Preis"
+        case .coverage: "Versicherungssumme"
+        }
+    }
+}
+
+extension Array where Element == Offer {
+    /// Preis: günstigste zuerst. Versicherungssumme: höchste Absicherung zuerst, bei Gleichstand die günstigere.
+    public func sorted(by order: OfferSortOrder) -> [Offer] {
+        sorted { a, b in
+            switch order {
+            case .price:
+                return a.priceCents != b.priceCents ? a.priceCents < b.priceCents : a.id < b.id
+            case .coverage:
+                let coverageA = a.coverageEuro ?? 0
+                let coverageB = b.coverageEuro ?? 0
+                if coverageA != coverageB { return coverageA > coverageB }
+                return a.priceCents != b.priceCents ? a.priceCents < b.priceCents : a.id < b.id
+            }
+        }
+    }
+}

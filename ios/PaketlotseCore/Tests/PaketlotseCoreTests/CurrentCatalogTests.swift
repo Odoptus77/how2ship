@@ -82,6 +82,23 @@ final class CurrentCatalogTests: XCTestCase {
         XCTAssertEqual(offers.map(\.id), ["dhl-paeckchen-m", "dhl-paket-2kg"])
     }
 
+    func testSortByCoverage() {
+        let offers = engine.offers(for: shoebox).sorted(by: .coverage)
+        // GLS haftet mit 750 € am höchsten; bei Gleichstand zuerst die günstigere PaketShop-Zustellung
+        XCTAssertEqual(offers.prefix(3).map(\.id), ["gls-shop-s", "gls-home-s", "dpd-classic-s"])
+        XCTAssertEqual(offers.last?.coverageEuro ?? 0, 0)
+        XCTAssertTrue(offers.first?.badges.contains(.bestLiability) ?? false)
+    }
+
+    func testSortByPriceKeepsEngineOrder() {
+        let offers = engine.offers(for: shoebox)
+        XCTAssertEqual(offers.sorted(by: .price).map(\.id), offers.map(\.id))
+    }
+
+    func testCatalogHasOnlyOnlineTariffs() {
+        XCTAssertTrue(catalog.tariffs.allSatisfy { $0.channel == .online })
+    }
+
     func testGirthCalculation() {
         XCTAssertEqual(ParcelDimensions(lengthCm: 100, widthCm: 40, heightCm: 30, weightKg: 1).girthCm, 240)
     }

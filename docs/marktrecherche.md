@@ -342,6 +342,73 @@ paketpilot, paketfuchs, portofuchs, paketradar, paketmeister, paketguru, paketbu
 3. App Store und Google Play nach dem Namen durchsuchen, ebenso Instagram-, TikTok- und Facebook-Handles.
 4. Danach sofort die Domains `.de`, `.com` und `.app` sichern und eine deutsche Wortmarke anmelden (DPMA, ab 290 € für 3 Klassen). Eine EU-Marke ist später möglich.
 
+### 10.6 Detailprüfung: Paketlotse und Paketkompass
+
+*Stand: 30.09.2026. Die DNS-Abfragen (NS, SOA, A, MX) liefen direkt über die Nameserver. Whois, DPMA und EUIPO waren per Proxy gesperrt.*
+
+#### Domains
+
+| Domain | .de | .com | .app | .eu | .net | .info | .io | .shop | .online | .at | .ch |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| paketlotse | NX | NX | NX | NX | NX | NX | NX | NX | NX | NX | NX |
+| paket-lotse | NX | NX | NX | NX | NX | NX | NX | NX | NX | NX | NX |
+| paketkompass | NX | NX | NX | NX | NX | NX | NX | NX | NX | NX | NX |
+| paket-kompass | NX | NX | NX | NX | NX | NX | NX | NX | NX | NX | NX |
+
+„NX“ steht für NXDOMAIN: Die Domain steht nicht in der Zonendatei der Registry. Zur Gegenprobe liefern bekannte Domains wie google.de und paketpilot.de korrekt NS-Einträge zurück. Bei `.de` ist eine Domain ohne Nameserver praktisch nicht registrierbar. NXDOMAIN ist deshalb ein **starkes Indiz dafür, dass die Domain frei ist**, aber keine Garantie, etwa bei gesperrten oder gerade gelöschten Domains.
+
+**Ähnliche, bereits registrierte Domains:**
+
+| Domain | Status | Inhalt laut Websuche |
+|---|---|---|
+| versandlotse.de | registriert (Cloudflare) | nichts gefunden |
+| portolotse.de | registriert (IONOS) | nichts gefunden |
+| postlotse.de | registriert | nichts gefunden |
+| versandkompass.de | registriert (All-Inkl) | nichts gefunden |
+| lotse.de, kompass.de | registriert | kompass.de gehört KOMPASS-Karten (Wanderkarten) |
+| frachtlotse.de, paketlotsen.de, portokompass.de | NXDOMAIN | – |
+
+#### Namensumfeld und Kollisionsrisiko
+
+**Paketlotse**
+- Websuche nach „Paketlotse“, „Paket-Lotse“ und „Paket Lotse“: **keine Firma, App, Website oder Social-Media-Handles gefunden.**
+- „Lotse“ ist bei Vergleichsportalen verbreitet: Spar-Lotse, VertragLotse, Tariflotse24 (Versicherungen, Energie, Finanzen). Daraus folgt:
+  - Das **Konfliktrisiko ist gering**, weil diese Portale in anderen Branchen arbeiten und „Lotse“ als häufiger Namensbestandteil nur schwach unterscheidet.
+  - Dafür ist der **eigene Markenschutz enger**: Geschützt ist im Kern die Kombination „Paketlotse“, nicht „Lotse“ allein.
+- Zu versandlotse.de, portolotse.de und postlotse.de gibt es keine erkennbare Nutzung. Trotzdem sollten ältere Marken dazu im Register geprüft werden.
+
+**Paketkompass**
+- Websuche nach „Paketkompass“ und „Paket-Kompass“: keine gleichnamige Firma oder App gefunden.
+- Das Umfeld um **„Kompass“ ist aber stark belegt**, zum Teil ganz in der Nähe:
+  - **KOMPASS Logistik-IT**: Logistik-Software, forscht zur **Paket- und Verpackungsoptimierung** („Auf der Suche nach dem perfekten Paket“). **Das ist thematisch sehr nah.**
+  - **Kompass Logistik GmbH** (Hanau)
+  - **KOMPASS** (kompass.com): B2B-Firmenverzeichnis, Klasse 35
+  - **KOMPASS-Karten**: Wanderkarten und App, bekannte Marke
+  - **F.A.Z. Kaufkompass**: Test- und Kaufberatungs-App, also eine Vergleichs- bzw. Beratungsleistung
+  - Im App Store gibt es zahlreiche „Kompass“-Apps. Das erschwert die Suche und die Wiedererkennung.
+
+#### Ergebnis
+
+| Kriterium | Paketlotse | Paketkompass |
+|---|---|---|
+| Domains (alle 11 geprüften Endungen) | ✅ vermutlich frei | ✅ vermutlich frei |
+| Gleichnamige Firma, App oder Handle | ✅ keine gefunden | ✅ keine gefunden |
+| Kollisionsrisiko im Umfeld | 🟡 gering (Versandlotse & Co. ohne Nutzung, „…lotse“-Portale in anderen Branchen) | 🔴 erhöht (KOMPASS Logistik-IT, Kompass Logistik GmbH, F.A.Z. Kaufkompass, KOMPASS-Verzeichnis) |
+| Unterscheidbarkeit im App Store | ✅ gut | 🟡 viele „Kompass“-Apps |
+| Wirkung | seriös, „führt mich“, passt zu Beratung und Vergleich | Orientierung, eher neutral |
+
+**Empfehlung: Paketlotse.** Paketkompass nur als Reserve.
+
+#### Nächste Schritte (vor Registrierung und Launch)
+1. **Sofort registrieren**, bevor jemand anderes zugreift (Kosten ca. 5 bis 20 € pro Jahr):
+   - Domains `paketlotse.de`, `paketlotse.com`, `paketlotse.app`
+   - Optional `paket-lotse.de`
+2. **Markenrecherche in DPMAregister und TMview** (Klassen 9, 35, 39, 42):
+   - Identisch: „Paketlotse“
+   - Ähnlich: „Versandlotse“, „Portolotse“, „Postlotse“, „Paketpilot“ sowie Marken mit „Lotse“ in Klasse 39
+3. **Deutsche Wortmarke „Paketlotse“** beim DPMA anmelden (online 290 € für bis zu 3 Klassen, empfohlen: 9, 35, 39). Optional vorher eine anwaltliche Kollisionsprüfung (ca. 200 bis 500 €).
+4. **Handles sichern:** Instagram, TikTok, Facebook, X, YouTube (@paketlotse), außerdem den Entwicklernamen im App Store und bei Google Play.
+
 ---
 
 ## Quellen
@@ -382,3 +449,9 @@ paketpilot, paketfuchs, portofuchs, paketradar, paketmeister, paketguru, paketbu
 - Pirate Ship / Shippo / Easyship Vergleich: https://www.aftership.com/blog/easyship-vs-pirate-ship-vs-shippo
 - Eurosender Partnerprogramm (7 %): https://www.affiliate-marketing.de/partnerprogramme/eurosender.com
 - Paketshop-Vergütung (paketda): https://www.paketda.de/news-kurznachrichten-20191213.html
+- Spar-Lotse: https://www.spar-lotse.de/
+- VertragLotse: https://vertraglotse.de/vergleich
+- KOMPASS Logistik-IT (Logistik Heute): https://logistik-heute.de/fachmagazin/fachartikel/kompass-logistik-it-auf-der-suche-nach-dem-perfekten-paket-38160.html
+- Kompass Logistik GmbH Hanau: https://firmeneintrag.creditreform.de/63452/6130229417/KOMPASS_LOGISTIK_GMBH
+- F.A.Z. Kaufkompass (App Store): https://apps.apple.com/de/app/kaufkompass/id6755041134
+- Kompass Karten (Wikipedia): https://en.wikipedia.org/wiki/Kompass_Karten

@@ -100,6 +100,14 @@ final class AppStore {
         }
     }
 
+    /// Offene Buchung per Wischgeste entfernen (inkl. geplanter Erinnerungen).
+    func deleteBooking(_ booking: PendingBooking) {
+        bookings.removeAll { $0.id == booking.id }
+        notifications.cancelReminders(for: booking.id)
+        if promptBooking?.id == booking.id { promptBooking = nil }
+        save()
+    }
+
     func markNotBooked(_ booking: PendingBooking) {
         update(booking.id) { $0.status = .dismissed }
         notifications.cancelReminders(for: booking.id)

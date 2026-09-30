@@ -5,47 +5,45 @@ import PaketlotseCore
 struct ShipmentsView: View {
     @Environment(AppStore.self) private var store
     @State private var showAdd = false
+    @State private var path: [Shipment] = []
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    if store.openBookings.isEmpty && store.shipments.isEmpty {
-                        EmptyStateView(
-                            systemImage: "shippingbox",
-                            title: "Noch keine Sendungen",
-                            message: "Nach einer Buchung fragen wir dich nach der Sendungsnummer. Du kannst auch Pakete hinzufügen, die du erwartest."
-                        )
-                    }
+        NavigationStack(path: $path) {
+            // List statt ScrollView: nur so gibt es das native „Nach links wischen zum Löschen“.
+            List {
+                if store.openBookings.isEmpty && store.shipments.isEmpty {
+                    EmptyStateView(
+                        systemImage: "shippingbox",
+                        title: "Noch keine Sendungen",
+                        message: "Nach einer Buchung fragen wir dich nach der Sendungsnummer. Du kannst auch Pakete hinzufügen, die du erwartest."
+                    )
+                    .cardRow()
+                }
 
-                    if !store.openBookings.isEmpty {
-                        SectionHeader(title: "Offene Buchungen")
-                        ForEach(store.openBookings) { booking in
-                            Button { store.openPrompt(forBookingID: booking.id) } label: {
-                                OpenBookingRow(booking: booking)
+                if !store.openBookings.isEmpty {
+                    SectionHeader(title: "Offene Buchungen")
+                        .cardRow(top: 12)
+                    ForEach(store.openBookings) { booking in
+                        Button { store.openPrompt(forBookingID: booking.id) } label: {
+                            OpenBookingRow(booking: booking)
+                        }
+                        .buttonStyle(.plain)
+                        .cardRow()
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(role: .destructive) {
+                                withAnimation { store.deleteBooking(booking) }
+                            } label: {
+                                Label("Löschen", systemImage: "trash")
                             }
-                            .buttonStyle(.plain)
-                        }
-                    }
-
-                    if !store.activeShipments.isEmpty {
-                        SectionHeader(title: "Unterwegs")
-                        ForEach(store.activeShipments) { shipment in
-                            NavigationLink(value: shipment) { ShipmentRow(shipment: shipment) }
-                                .buttonStyle(.plain)
-                        }
-                    }
-
-                    if !store.deliveredShipments.isEmpty {
-                        SectionHeader(title: "Zugestellt")
-                        ForEach(store.deliveredShipments) { shipment in
-                            NavigationLink(value: shipment) { ShipmentRow(shipment: shipment) }
-                                .buttonStyle(.plain)
                         }
                     }
                 }
-                .padding(Theme.padding)
+
+                shipmentSection("Unterwegs", store.activeShipments)
+                shipmentSection("Zugestellt", store.deliveredShipments)
             }
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
             .background(Theme.background.ignoresSafeArea())
             .navigationTitle("Sendungen")
             .navigationDestination(for: Shipment.self) { ShipmentDetailView(shipment: $0) }
@@ -57,6 +55,37 @@ struct ShipmentsView: View {
             }
             .sheet(isPresented: $showAdd) { TrackingPromptSheet(booking: nil) }
         }
+    }
+
+    @ViewBuilder
+    private func shipmentSection(_ title: String, _ shipments: [Shipment]) -> some View {
+        if !shipments.isEmpty {
+            SectionHeader(title: title)
+                .cardRow(top: 12)
+            ForEach(shipments) { shipment in
+                Button { path.append(shipment) } label: {
+                    ShipmentRow(shipment: shipment)
+                }
+                .buttonStyle(.plain)
+                .cardRow()
+                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                    Button(role: .destructive) {
+                        withAnimation { store.delete(shipment) }
+                    } label: {
+                        Label("Löschen", systemImage: "trash")
+                    }
+                }
+            }
+        }
+    }
+}
+
+private extension View {
+    /// Listenzeile im Karten-Look: ohne Trennlinie und Hintergrund, mit Seitenabstand wie im Rest der App.
+    func cardRow(top: CGFloat = 6) -> some View {
+        listRowInsets(EdgeInsets(top: top, leading: Theme.padding, bottom: 6, trailing: Theme.padding))
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.clear)
     }
 }
 

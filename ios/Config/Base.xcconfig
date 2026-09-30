@@ -1,0 +1,7 @@
+// Gemeinsame Build-Einstellungen. Geheimnisse gehören in Secrets.xcconfig (nicht eingecheckt).
+// Vorlage: Secrets.example.xcconfig → nach Secrets.xcconfig kopieren und Key eintragen.
+
+// DHL Location Finder – Unified API (https://developer.dhl.com). Leer = nur OpenStreetMap.
+DHL_API_KEY =
+
+#include? "Secrets.xcconfig"

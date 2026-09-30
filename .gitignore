@@ -7,3 +7,6 @@ DerivedData/
 xcuserdata/
 *.xcuserstate
 .DS_Store
+
+# Geheimnisse (API-Keys)
+ios/Config/Secrets.xcconfig

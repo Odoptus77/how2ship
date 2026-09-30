@@ -38,6 +38,7 @@ ios/
 │   │   ├── Booking.swift            Offene Buchung + Abfrage-Regeln (60 s, 48 h, Erinnerungen)
 │   │   ├── Shipment.swift           Sendung, Status, Ereignisse
 │   │   ├── BoxMeasurement.swift     Rechenlogik der Kamera-Vermessung (Punkte → L × B × H)
+│   │   ├── Locations/               Abgabestellen: Modell, DHL- & Overpass-Parser, OSM-Öffnungszeiten
 │   │   └── Resources/tarife-beispiel.json   ⚠️ BEISPIELPREISE
 │   └── Tests/PaketlotseCoreTests/
 └── Paketlotse/                      App (SwiftUI)
@@ -50,7 +51,7 @@ ios/
         ├── Measure/                 Kamera-Vermessung (ARKit + SceneKit)
         ├── Results/                 Ergebnisliste, Spar-Tipp, „Jetzt buchen“, „So vergleichen wir“
         ├── Shipments/               Sendungen, Abfrage der Sendungsnummer, Barcode-Scanner
-        ├── Map/                     Karte (Platzhalter für Paketshops)
+        ├── Map/                     Karte mit Abgabestellen, Filtern, Detailkarte, Route
         └── Profile/                 Premium (Platzhalter), Tarifstand, Rechtliches
 ```
 
@@ -75,8 +76,17 @@ Orientiert an der Referenz „Job Finder UI Kit“:
 | Sendungsliste und Detailansicht, Link zum Paketdienst | ✅ |
 | **Kamera-Vermessung** (ARKit, Scene Depth auf LiDAR-Geräten): 3 Bodenecken + Deckel, Live-Wert, Sicherheitsaufschlag, Plausibilitätsprüfung | ✅ nur auf echtem iPhone |
 | Automatischer Tracking-Status und Push (Backend) | ⏳ |
-| Paketshop-Karte mit Daten | ⏳ |
+| **Paketshop-Karte** mit echten Standorten: DHL Location Finder (optional, API-Key) + OpenStreetMap für Hermes/DPD/GLS/UPS; Filter nach Paketdienst, Automaten, „Jetzt geöffnet“; Route | ✅ |
 | Premium (StoreKit 2), Werbung, Affiliate-Links | ⏳ |
+
+## Paketshop-Karte
+- **Ohne Einrichtung** lädt die Karte Standorte aus **OpenStreetMap**, über die Overpass API und ohne Key. Das deckt DHL-Packstationen, Postfilialen sowie Hermes-, DPD-, GLS- und UPS-Shops ab, soweit sie in OSM erfasst sind.
+- **Optional mit offiziellen DHL-Daten** (inkl. Öffnungszeiten):
+  1. Auf https://developer.dhl.com ein Konto anlegen, eine App erstellen und die API **„Location Finder – Unified“** hinzufügen. Der Key ist kostenlos.
+  2. `cp Config/Secrets.example.xcconfig Config/Secrets.xcconfig` ausführen und den Key eintragen. Die Datei wird nicht eingecheckt.
+  3. `xcodegen generate` ausführen und die App neu bauen.
+- Die Standort-Freigabe ist optional. Ohne Freigabe verschiebt man die Karte selbst und tippt auf „In diesem Bereich suchen“.
+- **Für den Produktivbetrieb:** Ein API-Key in der App ist auslesbar. Außerdem sind die öffentlichen Overpass-Server nicht für viele Nutzer gedacht. Beide Abfragen sollten später über das Paketlotse-Backend laufen, mit Cache. Die Quellenangabe „© OpenStreetMap-Mitwirkende“ ist Pflicht (ODbL) und bereits eingebaut.
 
 ## Kamera-Vermessung testen
 - Funktioniert **nur auf einem echten iPhone**, nicht im Simulator. Dort erscheint ein Hinweis.

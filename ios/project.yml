@@ -18,6 +18,9 @@ targets:
       - path: Paketlotse
     dependencies:
       - package: PaketlotseCore
+    configFiles:
+      Debug: Config/Base.xcconfig
+      Release: Config/Base.xcconfig
     info:
       path: Paketlotse/Info.plist
       properties:
@@ -27,6 +30,8 @@ targets:
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         NSCameraUsageDescription: "Paketlotse nutzt die Kamera, um Barcodes auf Versandlabels zu scannen und Pakete zu vermessen. Die Bilder werden nur auf deinem Gerät verarbeitet."
+        NSLocationWhenInUseUsageDescription: "Paketlotse nutzt deinen Standort, um Paketshops und Packstationen in deiner Nähe zu zeigen. Er wird nicht gespeichert."
+        DHLAPIKey: "$(DHL_API_KEY)"
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: de.paketlotse.app

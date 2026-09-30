@@ -301,6 +301,49 @@ Die Ergebnisliste ist **immer nach dem Gesamtpreis sortiert**. Provision und Wer
 
 ---
 
+## 10. App-Name (Recherche)
+
+*Stand: 30.09.2026. Methode: DNS-Abfrage für .de, .com und .app sowie eine Websuche nach Apps, Firmen und Marken mit gleichem Namen. Die Whois-Abfrage (DENIC) und die Markenregister (DPMA, EUIPO) waren per Proxy gesperrt und müssen noch geprüft werden.*
+
+### 10.1 Kriterien
+- **Deutsch und so geschrieben, wie man es spricht.** Man muss den Namen am Telefon oder im Gespräch weitergeben können, ohne ihn zu buchstabieren. Keine „2“, keine Anglizismen-Schreibweise.
+- **„Paket“ oder „Porto“ im Namen.** Das hilft bei der Suche im App Store, weil diese Wörter genau das sind, was Nutzer eintippen.
+- **Positiver Nutzen:** Der Name soll ausdrücken, dass die App führt, spart oder berät.
+- **Als Marke eintragbar.** Rein beschreibende Namen wie „Paketvergleich“ lassen sich schwer schützen.
+- **Keine Kollision** mit bestehenden Paket-, Versand- oder Tracking-Apps.
+
+### 10.2 Bereits belegt (Domain aktiv)
+paketpilot, paketfuchs, portofuchs, paketradar, paketmeister, paketguru, paketbutler, paketengel, paketfix, packpilot, packfix, paketly, paketo, versandfuchs, versandklar, schickfix, schickmal, sendwise, packwise, paketvergleich.de, versandlotse.de, versandkompass.de, paketheld.de, portoheld.de, paketsparer.de, portosparer.de
+
+### 10.3 Kandidaten ohne DNS-Eintrag (.de, .com und .app) und ohne Treffer in der Websuche
+
+| Name | Eindruck | Marke eintragbar? | Bemerkung |
+|---|---|---|---|
+| **Paketlotse** | „führt dich zum besten Versand“, seriös, deutsch | gut (bildhaft, nicht nur beschreibend) | **Empfehlung Nr. 1.** Keine App und keine Firma gefunden. „versandlotse.de“ ist belegt, deshalb auf Verwechslungsgefahr prüfen. |
+| **Paketschlau** | „schlau sparen“, freundlich, zeigt den Nutzen | mittel („schlau“ ist leicht beschreibend) | **Nr. 2.** Klingt locker und nahbar, passt gut zur Zielgruppe Privatkunden. |
+| **Paketkompass** | Orientierung, Beratung | gut | **Nr. 3.** „Kompass“ ist eine bekannte Marke für Wanderkarten, aber in einer anderen Branche. |
+| Portoschlau | wie Paketschlau, „Porto“ passt aber weniger zu Paketdiensten ohne Porto (Hermes, DPD) | mittel | Alternative |
+| Paketkenner | Kompetenz | gut | etwas nüchtern |
+| Paketscout | Suche, Entdecken | **Risiko** | Scout24 (ImmoScout24, AutoScout24) geht bekanntermaßen gegen „…Scout“-Namen vor |
+| Paketwahl, Versandwahl | beschreibend | schwach | schwer als Marke zu schützen |
+| Versandheld | eingängig | mittel | paketheld.de und portoheld.de sind belegt, dadurch droht Verwechslung |
+| Paketjoker, Schickschlau, Verschick | – | – | weniger passend bzw. wenig einprägsam |
+
+**how2send** (Vergleich): .de und .app ohne DNS-Eintrag, .com ist belegt. Der Name ist international, aber für eine rein deutsche Zielgruppe schwächer. Die Schreibweise mit „2“ muss man erklären, und das Wort „Paket“ fehlt für die Store-Suche.
+
+### 10.4 Empfehlung
+1. **Paketlotse**, mit Store-Titel „Paketlotse – Paketpreise vergleichen“
+2. **Paketschlau** als Alternative mit lockerem, sparorientiertem Auftreten
+3. **Paketkompass** als Reserve
+
+### 10.5 Vor der Entscheidung prüfen
+1. DENIC-Whois für `.de`, ICANN Lookup für `.com`. Wenn kein DNS-Eintrag existiert, kann die Domain trotzdem registriert sein.
+2. Marken in **DPMAregister** und **TMview** prüfen, in den Klassen 9 (Apps), 35 (Vermittlung, Werbung), 39 (Transport) und 42 (Software). Auch ähnliche Namen suchen (z. B. „Lotse“ bzw. „Versandlotse“).
+3. App Store und Google Play nach dem Namen durchsuchen, ebenso Instagram-, TikTok- und Facebook-Handles.
+4. Danach sofort die Domains `.de`, `.com` und `.app` sichern und eine deutsche Wortmarke anmelden (DPMA, ab 290 € für 3 Klassen). Eine EU-Marke ist später möglich.
+
+---
+
 ## Quellen
 
 - Packlink Preisvergleich: https://www.packlink.com/de-DE/paketversand-preisvergleich/

@@ -1,0 +1,31 @@
+{
+  "_hinweis": "Partnerlinks. Programm erst auf \"enabled\": true setzen, wenn die Platzhalter (…_ID) im Template durch deine echten IDs ersetzt sind. {url} = Ziel-URL, {clickref} = Klick-Referenz der Buchung.",
+  "programs": [
+    {
+      "id": "packlink",
+      "name": "Packlink",
+      "kind": "portal",
+      "enabled": false,
+      "template": "https://www.awin1.com/cread.php?awinmid=MERCHANT_ID&awinaffid=PUBLISHER_ID&clickref={clickref}&ued={url}",
+      "landingURL": "https://www.packlink.de/",
+      "description": "Über 10 Paketdienste vergleichen – teils mit Rabatten"
+    },
+    {
+      "id": "eurosender",
+      "name": "Eurosender",
+      "kind": "portal",
+      "enabled": false,
+      "template": "https://www.awin1.com/cread.php?awinmid=MERCHANT_ID&awinaffid=PUBLISHER_ID&clickref={clickref}&ued={url}",
+      "landingURL": "https://www.eurosender.com/de",
+      "description": "Sperrgut, Paletten und Auslandsversand"
+    },
+    {
+      "id": "carrier-beispiel",
+      "name": "Beispiel: Partnerprogramm eines Paketdienstes",
+      "kind": "carrier",
+      "enabled": false,
+      "template": "https://www.awin1.com/cread.php?awinmid=MERCHANT_ID&awinaffid=PUBLISHER_ID&clickref={clickref}&ued={url}"
+    }
+  ],
+  "carrierPrograms": {}
+}

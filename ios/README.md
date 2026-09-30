@@ -81,7 +81,8 @@ Orientiert an der Referenz „Job Finder UI Kit“:
 | Automatischer Tracking-Status und Push (Backend) | ⏳ |
 | **Paketshop-Karte** mit echten Standorten: DHL Location Finder (optional, API-Key) + OpenStreetMap für Hermes/DPD/GLS/UPS; Filter nach Paketdienst, Automaten, „Jetzt geöffnet“; Route | ✅ |
 | **Premium** (StoreKit 2, Einmalkauf 2,99 €): Paywall, Kaufen/Wiederherstellen, gespeicherte Paketgrößen, Versandverlauf & Kostenübersicht, unbegrenzter Sendungsverlauf | ✅ |
-| Werbung, Affiliate-Links | ⏳ |
+| **Partnerlinks** (Affiliate, z. B. Awin): „Jetzt buchen“ über Partnerlink mit Klick-Referenz und Kennzeichnung, Anzeige-Karte für Partner-Portale | ✅ vorbereitet, IDs fehlen |
+| Werbung | ⏳ |
 
 ## Paketshop-Karte
 - **Ohne Einrichtung** lädt die Karte Standorte aus **OpenStreetMap**, über die Overpass API und ohne Key. Das deckt DHL-Packstationen, Postfilialen sowie Hermes-, DPD-, GLS- und UPS-Shops ab, soweit sie in OSM erfasst sind.
@@ -107,6 +108,15 @@ Orientiert an der Referenz „Job Finder UI Kit“:
   2. Einen In-App-Kauf vom Typ **Nicht-verbrauchbar** mit der Produkt-ID `de.paketlotse.app.premium` und 2,99 € anlegen, mit Anzeigename, Beschreibung und Screenshot für die Prüfung.
   3. Die Produkt-ID muss mit `PurchaseManager.premiumProductID` übereinstimmen.
 - **Was Premium freischaltet:** gespeicherte Paketgrößen (Startbildschirm → „Größe speichern“), den Versandverlauf mit Kosten pro Jahr (Profil) und einen unbegrenzten Sendungsverlauf. Werbefrei ist über `purchases.showsAds` vorbereitet, eine Werbe-SDK gibt es noch nicht.
+
+## Partnerlinks aktivieren
+Die Konfiguration steht in `PaketlotseCore/Sources/PaketlotseCore/Resources/partner-links.json`.
+1. Bei **Awin** (awin.com) als Publisher registrieren, Paketlotse (App bzw. Website) als Werbefläche angeben, Programme von **Packlink** und **Eurosender** beantragen.
+2. Nach der Freigabe im Template `MERCHANT_ID` (Advertiser-ID des Programms) und `PUBLISHER_ID` (deine Publisher-ID) ersetzen und `"enabled": true` setzen.
+3. **Partner-Portale** (`"kind": "portal"`) erscheinen dann als Karte „Weitere Angebote bei Partnern“ (Anzeige) unter den Ergebnissen.
+4. Falls ein **Paketdienst** ein eigenes Programm anbietet: Programm mit `"kind": "carrier"` anlegen und unter `carrierPrograms` zuordnen, z. B. `"hermes": "hermes-awin"`. Dann läuft „Jetzt buchen“ für diesen Paketdienst über den Partnerlink und ist als „Partner-Link“ gekennzeichnet.
+- Jede Buchung bekommt eine Klick-Referenz (`pl-XXXXXXXX`) und speichert das Programm. So lassen sich Provisionen später Buchungen zuordnen.
+- Die Reihenfolge der Ergebnisse wird von Partnerlinks **nie** beeinflusst.
 
 ## App-Icon
 Variante B (Kartenpin mit Paket) ist im Asset-Katalog eingebaut, inklusive Dark- und Tinted-Variante (iOS 18+). Alle Einzelgrößen, die SVG-Quellen und ein ZIP liegen in `design/appicon/` (siehe `GROESSEN.md`).

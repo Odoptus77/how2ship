@@ -34,8 +34,15 @@ struct ResultsView: View {
                     SectionHeader(title: "\(offers.count) passende Angebote")
                     sortPicker
                     ForEach(offers) { offer in
-                        OfferCard(offer: offer) { book(offer) }
+                        OfferCard(
+                            offer: offer,
+                            isPartnerLink: store.partnerLinks.bookingLink(for: offer.tariff, clickRef: "")?.isPartnerLink ?? false
+                        ) { book(offer) }
                     }
+                }
+
+                if !portalLinks.isEmpty {
+                    PartnerPortalsCard(links: portalLinks) { url in openURL(url) }
                 }
 
                 Button {
@@ -97,10 +104,16 @@ struct ResultsView: View {
 
     /// Buchung läuft extern (Carrier-App bzw. Standardbrowser). Paketlotse liest dort nichts aus;
     /// bei der Rückkehr fragt die App nach der Sendungsnummer (Konzept 4.2).
+    /// Buchung läuft extern (Carrier-App bzw. Standardbrowser), ggf. über einen Partnerlink.
+    /// Paketlotse liest dort nichts aus; bei der Rückkehr fragt die App nach der Sendungsnummer (Konzept 4.2).
     private func book(_ offer: Offer) {
-        guard let url = offer.tariff.bookingURL else { return }
-        store.startBooking(for: offer)
+        guard let url = store.startBooking(for: offer) else { return }
         openURL(url)
+    }
+
+    /// Aktive Partner-Portale (z. B. Packlink) – nur wenn dort Partner-IDs hinterlegt sind.
+    private var portalLinks: [PortalLink] {
+        store.partnerLinks.portalLinks(clickRef: "pl-portal")
     }
 
     private static func cm(_ value: Double) -> String {
@@ -110,6 +123,7 @@ struct ResultsView: View {
 
 struct OfferCard: View {
     let offer: Offer
+    var isPartnerLink = false
     let onBook: () -> Void
 
     private var tariff: Tariff { offer.tariff }
@@ -183,11 +197,64 @@ struct OfferCard: View {
             if tariff.bookingURL != nil {
                 Button("Jetzt buchen", action: onBook)
                     .buttonStyle(PrimaryButtonStyle(compact: true))
+                if isPartnerLink {
+                    // Kennzeichnungspflicht (§ 5a UWG): Bei Buchung erhalten wir ggf. eine Provision.
+                    Label("Partner-Link – wir erhalten ggf. eine Provision, der Preis bleibt gleich.", systemImage: "link")
+                        .font(.lotse(11))
+                        .foregroundStyle(Theme.textSecondary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                }
             } else {
                 Text("Nur in der Filiale bzw. im Paketshop frankierbar")
                     .font(.lotse(12))
                     .foregroundStyle(Theme.textSecondary)
             }
+        }
+        .card()
+    }
+}
+
+/// Weitere Angebote bei Partner-Portalen – klar als Anzeige gekennzeichnet und getrennt vom neutralen Vergleich.
+struct PartnerPortalsCard: View {
+    let links: [PortalLink]
+    let onOpen: (URL) -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Weitere Angebote bei Partnern")
+                    .font(.lotse(15, .bold))
+                    .foregroundStyle(Theme.textPrimary)
+                Spacer()
+                Tag(text: "Anzeige")
+            }
+            ForEach(links) { entry in
+                Button { onOpen(entry.url) } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: "arrow.up.right.square.fill")
+                            .font(.system(size: 22))
+                            .foregroundStyle(Theme.primary)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(entry.program.name)
+                                .font(.lotse(15, .bold))
+                                .foregroundStyle(Theme.textPrimary)
+                            if let description = entry.program.description {
+                                Text(description)
+                                    .font(.lotse(12))
+                                    .foregroundStyle(Theme.textSecondary)
+                            }
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundStyle(Theme.textSecondary)
+                    }
+                }
+                .buttonStyle(.plain)
+            }
+            Text("Eigene Preise der Portale – nicht Teil des Vergleichs oben.")
+                .font(.lotse(11))
+                .foregroundStyle(Theme.textSecondary)
         }
         .card()
     }

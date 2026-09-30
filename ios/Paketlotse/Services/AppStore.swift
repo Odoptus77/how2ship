@@ -35,6 +35,11 @@ final class AppStore {
     // MARK: - Vergleich
 
     var engine: TariffEngine { TariffEngine(catalog: catalog) }
+
+    /// Partnerlinks (Affiliate). Ohne eingetragene Partner-IDs bleiben alle Links normale Links.
+    @ObservationIgnored let partnerLinks = PartnerLinkBuilder(
+        config: (try? PartnerLinkConfig.bundled()) ?? PartnerLinkConfig(programs: [])
+    )
     var advisor: SavingsAdvisor { SavingsAdvisor(engine: engine) }
 
     // MARK: - Listen
@@ -53,18 +58,29 @@ final class AppStore {
 
     // MARK: - Buchung → Abfrage der Sendungsnummer
 
-    /// „Jetzt buchen“ getippt: Buchung merken. Die Buchung selbst läuft extern (Carrier-App / Standardbrowser).
-    func startBooking(for offer: Offer) {
+    /// „Jetzt buchen“ getippt: Buchung merken und den Link (ggf. Partnerlink mit Klick-Referenz) liefern.
+    /// Die Buchung selbst läuft extern (Carrier-App / Standardbrowser).
+    func startBooking(for offer: Offer) -> URL? {
+        let bookingID = UUID()
+        guard let link = partnerLinks.bookingLink(for: offer.tariff, clickRef: Self.clickRef(for: bookingID)) else { return nil }
         let booking = PendingBooking(
+            id: bookingID,
             tariffID: offer.tariff.id,
             carrier: offer.tariff.carrier,
             product: offer.tariff.product,
-            priceCents: offer.priceCents
+            priceCents: offer.priceCents,
+            partnerProgramID: link.programID
         )
         bookings.append(booking)
         save()
         let policy = self.policy
         Task { await notifications.scheduleRemindersIfAuthorized(for: booking, policy: policy) }
+        return link.url
+    }
+
+    /// Kurze, nicht personenbezogene Klick-Referenz, z. B. „pl-3F2A9C1B“.
+    static func clickRef(for bookingID: UUID) -> String {
+        "pl-" + bookingID.uuidString.prefix(8)
     }
 
     /// Aufruf, wenn die App in den Vordergrund kommt.

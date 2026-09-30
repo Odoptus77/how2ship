@@ -105,7 +105,7 @@ Der Markt ist also groß und wächst. Der Anteil, der **aktiv verglichen** wird 
 Ein weiterer Rechner nach dem Muster „Maße eingeben und Preisliste sehen“ bringt wenig Neues. Folgende Ansätze könnten how2ship/how2send unterscheiden:
 
 1. **Das „how2“ ernst nehmen: Beratung statt nur Preisliste**
-   - **Karton mit der Handykamera vermessen** (AR bzw. LiDAR). Das ist ein echtes App-Argument, das die Web-Rechner nicht haben.
+   - **Karton mit der Handykamera vermessen** (AR bzw. LiDAR). Achtung: DHL (Packset-App) und Hermes bieten AR bereits an, aber jeweils nur für ihre eigenen Formate. Neu wäre die Kombination aus Kamera-Vermessung und Vergleich über alle Anbieter hinweg (siehe Abschnitt 8).
    - **Formatgrenzen erkennen:** „Wenn du 2 cm kürzer packst, passt es in Hermes S und kostet 2,10 € weniger.“
    - Tipps zu Verpackung, Sperrgut, Versicherung und Haftungsgrenzen (z. B. DPD-Haftungsfalle)
    - Günstigste **Abgabestelle in der Nähe** mit Öffnungszeiten (Paketshop, Packstation, Abholung)
@@ -149,6 +149,48 @@ Ein weiterer Rechner nach dem Muster „Maße eingeben und Preisliste sehen“ b
 
 ---
 
+## 8. App-Markt (Nachtrag)
+
+*Websuche vom 30.09.2026. Direkte Store-Abfragen waren per Proxy gesperrt, deshalb sind die Download-Zahlen nur teilweise bekannt.*
+
+### 8.1 Vergleichs-Apps für Deutschland (am nächsten an how2ship/how2send)
+
+| App | Plattform | Was sie kann | Einschätzung |
+|---|---|---|---|
+| **Versandpreis** (Mypaketkasten GmbH) | iOS und Android | Vergleicht DHL, GLS, Hermes und DPD, dazu Briefporto der Deutschen Post und eine Paketshop-Suche | **Der direkteste Konkurrent.** Nur ca. 5.000+ Downloads bei Google Play. Es ist ein Nebenprodukt eines Paketkasten-Händlers und hat keine Buchungsfunktion. |
+| **PortoCheck** | nur iOS | Vergleicht DHL/Post, Hermes, DPD und GLS nach Maßen und Gewicht, Deutschland und EU | Hobby-Niveau mit 3,5 Sternen bei 2 Bewertungen und Werbung. Preise auf dem Stand von 08/2025. |
+| **Eurosender Mobile** | iOS und Android | Angebote von über 100 Carriern, Buchung, Label in der App, Tracking | Neu (2026). Die erste echte Buchungs-App, allerdings mit Fokus auf internationale Sendungen und Gewerbekunden. |
+| **Packlink** | Web und Shop-Plugins | Vergleich und Buchung | Soweit ich es finden konnte, gibt es **keine eigenständige Endkunden-App**. Packlink setzt auf Web und Plugins für Shopify, Wix usw. |
+
+### 8.2 Apps der Paketdienste (indirekte Konkurrenz)
+
+- **DHL Post & Paket** und **DHL Packset:** Frankierung, Packstation und **AR-Bestimmung der Paketgröße per Kamera**, aber nur für DHL.
+- **Hermes Paket:** Paketschein, Paketshop-Suche und **AR-Paketgrößen-Rechner** (seit 2018), aber nur für Hermes.
+- **DPD, GLS, UPS:** jeweils eigene Apps zum Versenden und Verfolgen, aber nur für die eigene Marke.
+
+Die Paketdienste haben also gute Apps, **vergleichen aber naturgemäß nicht mit der Konkurrenz.**
+
+### 8.3 Tracking-Apps (angrenzend, nicht direkt konkurrierend)
+
+Parcello, Parcel, Paketverfolgung & Parcel Track, Tracker Parcel und weitere. Sie verfolgen Sendungen von über 100 bis 300 Anbietern, **bieten aber keinen Preisvergleich und keinen Versand an.** Eine mögliche Idee wäre ein späteres Zusatzfeature (Versenden und Verfolgen in einer App) oder eine Partnerschaft.
+
+### 8.4 Internationale Vorbilder
+
+| App | Markt | Bemerkung |
+|---|---|---|
+| **Parcel2Go** | UK | Eigene App für iOS und Android, 4,4 von 5 Sternen bei Trustpilot. Zeigt, wie eine erfolgreiche Vergleichs- und Buchungs-App aussieht. |
+| **Parcel Monkey** | UK/EU (auch DE-Seite) | Web-Fokus, 3,8 von 5 Sternen bei Trustpilot |
+| **Pirate Ship, Shippo, Easyship** | USA/international | Zielgruppe sind Kleingewerbe und Onlinehändler. Pirate Ship ist kostenlos und ohne Aufschlag, verdient sein Geld über Carrier-Konditionen. Das ist ein Vorbild für das Segment „Kleingewerbe“. |
+
+### 8.5 Fazit App-Markt
+
+- **Im App-Store ist die Lücke echt:** Es gibt in Deutschland **keine gut gemachte, anbieterübergreifende Vergleichs- und Buchungs-App für Privatleute und Kleingewerbe.** Die vorhandenen Vergleichs-Apps (Versandpreis, PortoCheck) sind klein, veraltet und ohne Buchung. Packlink hat keine Endkunden-App.
+- **Die Konkurrenz sitzt woanders:** Endkunden nutzen die Apps der Paketdienste (DHL, Hermes) oder den eingebauten Versand der Marktplätze (Vinted, Kleinanzeigen). Die Hürde ist also nicht eine bessere Vergleichs-App, sondern **Nutzer von der DHL-App wegzuholen.**
+- **USP-Chance:** **AR-Vermessung für alle Anbieter** (DHL und Hermes können das nur jeweils für sich), dazu „packe 2 cm kürzer und spare X €“, Paketshop-Finder, und später Label-Kauf und Tracking in einer App.
+- **Store-Suchbegriffe** („Paket versenden“, „Porto“, „Versandkosten“) sind von den Paketdienst-Apps und Tracking-Apps belegt. Kleine Wettbewerber ranken schwach, **App Store Optimization (ASO) ist also machbar.**
+
+---
+
 ## Quellen
 
 - Packlink Preisvergleich: https://www.packlink.com/de-DE/paketversand-preisvergleich/
@@ -172,3 +214,16 @@ Ein weiterer Rechner nach dem Muster „Maße eingeben und Preisliste sehen“ b
 - Vinted individueller Versand: https://www.vinted.com/help/443-wie-funktioniert-individueller-versand
 - HOW2SHIP LLC: https://brokersnapshot.com/Company?dot=3024882&prefix=MC&docket=36372
 - How2ship auf uShip: https://www.uship.com/profile/how2ship/
+- Versandpreis (iOS): https://apps.apple.com/de/app/versandpreis/id972360669
+- Versandpreis (Google Play): https://play.google.com/store/apps/details?id=com.mypaketkasten.vergleichsapp
+- Versandpreis-App (Mypaketkasten): https://mypaketkasten.de/versandkostenrechner-app
+- PortoCheck (iOS): https://apps.apple.com/us/app/portocheck/id323489326
+- Eurosender App-Launch: https://blog.eurosender.com/eurosender-app-launch/
+- Eurosender Mobile (Google Play): https://play.google.com/store/apps/details?id=com.eurosender.app
+- Hermes AR-Paketgröße: https://newsroom.hermesworld.com/augmented-reality-hermes-app-erkennt-paketgroesse-per-smartphone-kamera-14417/
+- DHL Packset AR: https://www.appgefahren.de/dhl-packset-mit-der-kamera-die-richtige-paketgroesse-bestimmen-209228.html
+- Paketdienst-Apps im Test (connect): https://www.connect-living.de/vergleich/paketdienst-apps-vergleichstest-3202182.html
+- Parcello (iOS): https://apps.apple.com/de/app/parcello-sendungsverfolgung/id1061039420
+- Parcel2Go App (Google Play): https://play.google.com/store/apps/details?id=com.parcel2go.parcel2goapp
+- Parcel2Go Trustpilot: https://www.trustpilot.com/review/www.parcel2go.com
+- Pirate Ship / Shippo / Easyship Vergleich: https://www.aftership.com/blog/easyship-vs-pirate-ship-vs-shippo

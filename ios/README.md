@@ -94,6 +94,9 @@ Orientiert an der Referenz „Job Finder UI Kit“:
 - Ablauf: Karton auf den Boden stellen, iPhone kurz bewegen, drei untere Ecken mit + setzen, dann auf den Deckel zielen. Mit „Übernehmen“ landen die Werte in den Eingabefeldern.
 - Die Werte enthalten 1 cm Sicherheitsaufschlag und sind auf ganze cm aufgerundet.
 
+## App-Icon
+Variante B (Kartenpin mit Paket) ist im Asset-Katalog eingebaut, inklusive Dark- und Tinted-Variante (iOS 18+). Alle Einzelgrößen, die SVG-Quellen und ein ZIP liegen in `design/appicon/` (siehe `GROESSEN.md`).
+
 ## Wichtig vor einem Release
 - **Tarife:** `tarife-beispiel.json` enthält **Platzhalterpreise**. Vor dem Release mit den offiziellen Preislisten abgleichen und `isSample` auf `false` setzen.
 - **Sendungsnummern:** Die Muster in `TrackingNumberDetector` sind Heuristiken und müssen mit echten Sendungsnummern geprüft werden. Dasselbe gilt für die Tracking-URLs in `Carrier.swift`.

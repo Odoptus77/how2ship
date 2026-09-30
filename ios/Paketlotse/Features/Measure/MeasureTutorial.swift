@@ -24,7 +24,7 @@ struct MeasureTutorialSheet: View {
             }
 
             MeasureTutorialAnimation(dimension: dimension)
-                .frame(height: 240)
+                .frame(height: 280)
                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                 .accessibilityLabel("Animation: \(dimension.title) am Karton messen")
 
@@ -40,15 +40,18 @@ struct MeasureTutorialSheet: View {
             }
             .toggleStyle(CheckboxToggleStyle())
 
-            Button("Verstanden, \(dimension.title.lowercased()) messen", action: onStart)
+            Button("Verstanden – \(dimension.title) messen", action: onStart)
                 .buttonStyle(PrimaryButtonStyle())
 
             Text("Über das ? oben kannst du diese Anleitung jederzeit wieder öffnen.")
                 .font(.lotse(11))
                 .foregroundStyle(Theme.textSecondary)
                 .frame(maxWidth: .infinity)
+
+            Spacer(minLength: 0)
         }
-        .padding(24)
+        .padding(.horizontal, 24)
+        .padding(.top, 28)
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
     }
@@ -121,6 +124,7 @@ enum MeasureTutorialScene {
         scene.background.contents = backgroundColor
 
         let pivot = SCNNode()
+        pivot.eulerAngles.y = -0.2
         scene.rootNode.addChildNode(pivot)
         pivot.addChildNode(box())
         pivot.addChildNode(floor())
@@ -128,10 +132,11 @@ enum MeasureTutorialScene {
         let (start, end) = edge(for: dimension)
         pivot.addChildNode(measurement(from: start, to: end))
 
-        // Leichtes Hin- und Herdrehen, damit der Karton räumlich wirkt.
+        // Leichtes Hin- und Herdrehen (−0,2 … +0,15 rad), damit der Karton räumlich wirkt
+        // und alle drei Kanten (vorne, rechts, senkrecht) sichtbar bleiben.
         let swing = SCNAction.sequence([
-            .rotateBy(x: 0, y: 0.35, z: 0, duration: 2.5),
-            .rotateBy(x: 0, y: -0.35, z: 0, duration: 2.5),
+            .rotateBy(x: 0, y: 0.35, z: 0, duration: 3),
+            .rotateBy(x: 0, y: -0.35, z: 0, duration: 3),
         ])
         swing.timingMode = .easeInEaseOut
         pivot.runAction(.repeatForever(swing))
@@ -139,9 +144,12 @@ enum MeasureTutorialScene {
         let camera = SCNNode()
         camera.name = cameraName
         camera.camera = SCNCamera()
-        camera.camera?.fieldOfView = 38
-        camera.simdPosition = SIMD3(0.62, 0.48, 0.78)
-        camera.simdLook(at: SIMD3(0, -0.02, 0))
+        camera.camera?.fieldOfView = 36
+        // Standard-zNear ist 1 m – der Karton steht näher und würde sonst abgeschnitten.
+        camera.camera?.zNear = 0.01
+        camera.camera?.zFar = 10
+        camera.simdPosition = SIMD3(0.68, 0.44, 0.66)
+        camera.simdLook(at: SIMD3(0, -0.04, 0))
         scene.rootNode.addChildNode(camera)
 
         let ambient = SCNNode()
@@ -185,12 +193,14 @@ enum MeasureTutorialScene {
     }
 
     private static func floor() -> SCNNode {
-        let plane = SCNPlane(width: 1.2, height: 1.2)
-        plane.cornerRadius = 0.6
-        plane.firstMaterial = material(UIColor.black.withAlphaComponent(0.06), lit: false)
+        let plane = SCNPlane(width: 0.54, height: 0.44)
+        plane.cornerRadius = 0.22
+        plane.firstMaterial = material(UIColor.black.withAlphaComponent(0.08), lit: false)
+        plane.firstMaterial?.writesToDepthBuffer = false
         let node = SCNNode(geometry: plane)
         node.eulerAngles.x = -.pi / 2
-        node.simdPosition = SIMD3(0, -size.y / 2 - 0.001, 0)
+        node.simdPosition = SIMD3(0, -size.y / 2 - 0.002, 0)
+        node.renderingOrder = -1
         return node
     }
 

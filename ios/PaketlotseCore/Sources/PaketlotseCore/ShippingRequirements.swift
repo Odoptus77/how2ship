@@ -39,6 +39,8 @@ public struct ShippingRequirements: Codable, Hashable, Sendable {
     public var requiresPickup: Bool
     public var requiresSignature: Bool
     public var requiresPackstation: Bool
+    /// Nur Tarife, die an die Haustür zustellen (keine Zustellung in einen PaketShop).
+    public var requiresHomeDelivery: Bool
 
     public static let none = ShippingRequirements()
 
@@ -47,19 +49,22 @@ public struct ShippingRequirements: Codable, Hashable, Sendable {
         requiresTracking: Bool = false,
         requiresPickup: Bool = false,
         requiresSignature: Bool = false,
-        requiresPackstation: Bool = false
+        requiresPackstation: Bool = false,
+        requiresHomeDelivery: Bool = false
     ) {
         self.declaredValueEuro = declaredValueEuro
         self.requiresTracking = requiresTracking
         self.requiresPickup = requiresPickup
         self.requiresSignature = requiresSignature
         self.requiresPackstation = requiresPackstation
+        self.requiresHomeDelivery = requiresHomeDelivery
     }
 
     public var needsInsurance: Bool { (declaredValueEuro ?? 0) > 0 }
 
     public var isEmpty: Bool {
-        !needsInsurance && !requiresTracking && !requiresPickup && !requiresSignature && !requiresPackstation
+        !needsInsurance && !requiresTracking && !requiresPickup && !requiresSignature
+            && !requiresPackstation && !requiresHomeDelivery
     }
 }
 
@@ -76,6 +81,7 @@ extension Tariff {
     public func priced(for requirements: ShippingRequirements) -> PricedTariff? {
         if requirements.requiresTracking && !hasTracking { return nil }
         if requirements.requiresPackstation && !dropOff.contains(.packstation) { return nil }
+        if requirements.requiresHomeDelivery && delivery != .home { return nil }
 
         var selected: [AddOn] = []
 

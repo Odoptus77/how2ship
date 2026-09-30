@@ -73,7 +73,8 @@ struct ResultsView: View {
                     summaryTag("Wert \(value.formatted(.number.locale(Locale(identifier: "de_DE")))) €", "shield")
                 }
                 if requirements.requiresTracking { summaryTag("Sendungsverfolgung", "location") }
-                if requirements.requiresPickup { summaryTag("Abholung", "house") }
+                if requirements.requiresHomeDelivery { summaryTag("Haustür", "door.left.hand.closed") }
+                if requirements.requiresPickup { summaryTag("Abholung", "shippingbox.and.arrow.backward") }
                 if requirements.requiresSignature { summaryTag("Unterschrift", "signature") }
                 if requirements.requiresPackstation { summaryTag("Packstation", "square.grid.3x3.square") }
             }
@@ -137,14 +138,22 @@ struct OfferCard: View {
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 6) {
+                    if tariff.delivery == .shop {
+                        Tag(text: "Zustellung in PaketShop", systemImage: "storefront", tint: Theme.accent, background: Theme.accentSoft)
+                    }
                     Tag(text: tariff.channel == .online ? "Online" : "Filiale")
                     if tariff.hasTracking { Tag(text: "Sendungsverfolgung", systemImage: "location") }
                     if let insurance = offer.insurance, let coverage = insurance.coverageEuro {
                         Tag(text: "Versichert bis \(coverage.formatted(.number.locale(Locale(identifier: "de_DE")))) €", systemImage: "checkmark.shield", tint: Theme.primary)
-                    } else if let liability = tariff.liabilityEuro {
+                    } else if let liability = tariff.liabilityEuro, liability > 0 {
                         Tag(text: "Haftung \(liability) €", systemImage: "shield")
-                    } else {
+                    } else if tariff.liabilityEuro == 0 {
                         Tag(text: "Ohne Haftung", systemImage: "shield.slash")
+                    } else {
+                        Tag(text: "Haftung lt. AGB", systemImage: "shield")
+                    }
+                    if !tariff.hasTracking {
+                        Tag(text: "Ohne Sendungsverfolgung", systemImage: "location.slash")
                     }
                     if offer.badges.contains(.bestLiability) { Tag(text: "Beste Haftung", tint: Theme.primary) }
                     ForEach(tariff.dropOff, id: \.self) { Tag(text: $0.displayName) }

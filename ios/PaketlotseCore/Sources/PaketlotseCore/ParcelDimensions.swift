@@ -29,6 +29,12 @@ public struct ParcelDimensions: Codable, Hashable, Sendable {
     /// Messregel von Hermes, DPD und GLS: längste plus kürzeste Seite.
     public var longestPlusShortest: Double { longestSide + shortestSide }
 
+    /// Gurtmaß: längste Seite + 2 × (mittlere + kürzeste Seite) – z. B. DPD/GLS XL.
+    public var girthCm: Double {
+        let sides = sidesDescending
+        return sides[0] + 2 * (sides[1] + sides[2])
+    }
+
     public func volumetricWeightKg(divisor: Double) -> Double {
         lengthCm * widthCm * heightCm / divisor
     }

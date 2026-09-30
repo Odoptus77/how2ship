@@ -1,0 +1,1245 @@
+{
+  "version": "2026.09",
+  "validFrom": "30.09.2026",
+  "sourceNote": "Privatkundenpreise der Paketdienste, Stand 30.09.2026 (DHL 2026, Hermes ab 02.03.2026, DPD/GLS nach Preiserhöhung 2026, UPS-Tariftabelle 2026). Alle Angaben ohne Gewähr.",
+  "isSample": false,
+  "tariffs": [
+    {
+      "id": "dhl-paeckchen-s",
+      "carrier": "dhl",
+      "family": "dhl-paeckchen",
+      "product": "Päckchen S",
+      "channel": "online",
+      "priceCents": 419,
+      "maxWeightKg": 2,
+      "rule": {
+        "maxDimensions": {
+          "lengthCm": 35,
+          "widthCm": 25,
+          "heightCm": 10
+        }
+      },
+      "liabilityEuro": 0,
+      "hasTracking": false,
+      "delivery": "home",
+      "transitDays": "1–3",
+      "dropOff": [
+        "filiale",
+        "paketshop",
+        "packstation"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.dhl.de/de/privatkunden/pakete-versenden/online-frankieren.html"
+    },
+    {
+      "id": "dhl-paeckchen-m",
+      "carrier": "dhl",
+      "family": "dhl-paeckchen",
+      "product": "Päckchen M",
+      "channel": "online",
+      "priceCents": 519,
+      "maxWeightKg": 2,
+      "rule": {
+        "maxDimensions": {
+          "lengthCm": 60,
+          "widthCm": 30,
+          "heightCm": 15
+        }
+      },
+      "liabilityEuro": 0,
+      "hasTracking": false,
+      "delivery": "home",
+      "transitDays": "1–3",
+      "dropOff": [
+        "filiale",
+        "paketshop",
+        "packstation"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.dhl.de/de/privatkunden/pakete-versenden/online-frankieren.html"
+    },
+    {
+      "id": "dhl-paket-2kg",
+      "carrier": "dhl",
+      "family": "dhl-paket",
+      "product": "Paket bis 2 kg",
+      "channel": "online",
+      "priceCents": 619,
+      "maxWeightKg": 2,
+      "rule": {
+        "maxDimensions": {
+          "lengthCm": 60,
+          "widthCm": 30,
+          "heightCm": 15
+        }
+      },
+      "liabilityEuro": 500,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "filiale",
+        "paketshop",
+        "packstation"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 699,
+          "coverageEuro": 2500
+        },
+        {
+          "kind": "insurance",
+          "priceCents": 1999,
+          "coverageEuro": 25000
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 300,
+          "coverageEuro": null
+        }
+      ],
+      "bookingURL": "https://www.dhl.de/de/privatkunden/pakete-versenden/online-frankieren.html"
+    },
+    {
+      "id": "dhl-paket-5kg",
+      "carrier": "dhl",
+      "family": "dhl-paket",
+      "product": "Paket bis 5 kg",
+      "channel": "online",
+      "priceCents": 769,
+      "maxWeightKg": 5,
+      "rule": {
+        "maxDimensions": {
+          "lengthCm": 120,
+          "widthCm": 60,
+          "heightCm": 60
+        }
+      },
+      "liabilityEuro": 500,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "filiale",
+        "paketshop",
+        "packstation"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 699,
+          "coverageEuro": 2500
+        },
+        {
+          "kind": "insurance",
+          "priceCents": 1999,
+          "coverageEuro": 25000
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 300,
+          "coverageEuro": null
+        }
+      ],
+      "bookingURL": "https://www.dhl.de/de/privatkunden/pakete-versenden/online-frankieren.html"
+    },
+    {
+      "id": "dhl-paket-10kg",
+      "carrier": "dhl",
+      "family": "dhl-paket",
+      "product": "Paket bis 10 kg",
+      "channel": "online",
+      "priceCents": 1049,
+      "maxWeightKg": 10,
+      "rule": {
+        "maxDimensions": {
+          "lengthCm": 120,
+          "widthCm": 60,
+          "heightCm": 60
+        }
+      },
+      "liabilityEuro": 500,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "filiale",
+        "paketshop",
+        "packstation"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 699,
+          "coverageEuro": 2500
+        },
+        {
+          "kind": "insurance",
+          "priceCents": 1999,
+          "coverageEuro": 25000
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 300,
+          "coverageEuro": null
+        }
+      ],
+      "bookingURL": "https://www.dhl.de/de/privatkunden/pakete-versenden/online-frankieren.html"
+    },
+    {
+      "id": "dhl-paket-20kg",
+      "carrier": "dhl",
+      "family": "dhl-paket",
+      "product": "Paket bis 20 kg",
+      "channel": "online",
+      "priceCents": 1899,
+      "maxWeightKg": 20,
+      "rule": {
+        "maxDimensions": {
+          "lengthCm": 120,
+          "widthCm": 60,
+          "heightCm": 60
+        }
+      },
+      "liabilityEuro": 500,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "filiale",
+        "paketshop",
+        "packstation"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 699,
+          "coverageEuro": 2500
+        },
+        {
+          "kind": "insurance",
+          "priceCents": 1999,
+          "coverageEuro": 25000
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 300,
+          "coverageEuro": null
+        }
+      ],
+      "bookingURL": "https://www.dhl.de/de/privatkunden/pakete-versenden/online-frankieren.html"
+    },
+    {
+      "id": "dhl-paket-31-5kg",
+      "carrier": "dhl",
+      "family": "dhl-paket",
+      "product": "Paket bis 31,5 kg",
+      "channel": "online",
+      "priceCents": 2399,
+      "maxWeightKg": 31.5,
+      "rule": {
+        "maxDimensions": {
+          "lengthCm": 120,
+          "widthCm": 60,
+          "heightCm": 60
+        }
+      },
+      "liabilityEuro": 500,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "filiale",
+        "paketshop",
+        "packstation"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 699,
+          "coverageEuro": 2500
+        },
+        {
+          "kind": "insurance",
+          "priceCents": 1999,
+          "coverageEuro": 25000
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 300,
+          "coverageEuro": null
+        }
+      ],
+      "bookingURL": "https://www.dhl.de/de/privatkunden/pakete-versenden/online-frankieren.html"
+    },
+    {
+      "id": "dhl-paeckchen-s-filiale",
+      "carrier": "dhl",
+      "family": "dhl-paeckchen",
+      "product": "Päckchen S",
+      "channel": "shop",
+      "priceCents": 419,
+      "maxWeightKg": 2,
+      "rule": {
+        "maxDimensions": {
+          "lengthCm": 35,
+          "widthCm": 25,
+          "heightCm": 10
+        }
+      },
+      "liabilityEuro": 0,
+      "hasTracking": false,
+      "delivery": "home",
+      "transitDays": "1–3",
+      "dropOff": [
+        "filiale"
+      ],
+      "addOns": [],
+      "bookingURL": null
+    },
+    {
+      "id": "dhl-paeckchen-m-filiale",
+      "carrier": "dhl",
+      "family": "dhl-paeckchen",
+      "product": "Päckchen M",
+      "channel": "shop",
+      "priceCents": 519,
+      "maxWeightKg": 2,
+      "rule": {
+        "maxDimensions": {
+          "lengthCm": 60,
+          "widthCm": 30,
+          "heightCm": 15
+        }
+      },
+      "liabilityEuro": 0,
+      "hasTracking": false,
+      "delivery": "home",
+      "transitDays": "1–3",
+      "dropOff": [
+        "filiale"
+      ],
+      "addOns": [],
+      "bookingURL": null
+    },
+    {
+      "id": "dhl-paket-5kg-filiale",
+      "carrier": "dhl",
+      "family": "dhl-paket",
+      "product": "Paket bis 5 kg",
+      "channel": "shop",
+      "priceCents": 769,
+      "maxWeightKg": 5,
+      "rule": {
+        "maxDimensions": {
+          "lengthCm": 120,
+          "widthCm": 60,
+          "heightCm": 60
+        }
+      },
+      "liabilityEuro": 500,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "filiale"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 699,
+          "coverageEuro": 2500
+        },
+        {
+          "kind": "insurance",
+          "priceCents": 1999,
+          "coverageEuro": 25000
+        }
+      ],
+      "bookingURL": null
+    },
+    {
+      "id": "dhl-paket-10kg-filiale",
+      "carrier": "dhl",
+      "family": "dhl-paket",
+      "product": "Paket bis 10 kg",
+      "channel": "shop",
+      "priceCents": 1049,
+      "maxWeightKg": 10,
+      "rule": {
+        "maxDimensions": {
+          "lengthCm": 120,
+          "widthCm": 60,
+          "heightCm": 60
+        }
+      },
+      "liabilityEuro": 500,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "filiale"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 699,
+          "coverageEuro": 2500
+        },
+        {
+          "kind": "insurance",
+          "priceCents": 1999,
+          "coverageEuro": 25000
+        }
+      ],
+      "bookingURL": null
+    },
+    {
+      "id": "dhl-paket-20kg-filiale",
+      "carrier": "dhl",
+      "family": "dhl-paket",
+      "product": "Paket bis 20 kg",
+      "channel": "shop",
+      "priceCents": 1899,
+      "maxWeightKg": 20,
+      "rule": {
+        "maxDimensions": {
+          "lengthCm": 120,
+          "widthCm": 60,
+          "heightCm": 60
+        }
+      },
+      "liabilityEuro": 500,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "filiale"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 699,
+          "coverageEuro": 2500
+        },
+        {
+          "kind": "insurance",
+          "priceCents": 1999,
+          "coverageEuro": 25000
+        }
+      ],
+      "bookingURL": null
+    },
+    {
+      "id": "dhl-paket-31-5kg-filiale",
+      "carrier": "dhl",
+      "family": "dhl-paket",
+      "product": "Paket bis 31,5 kg",
+      "channel": "shop",
+      "priceCents": 2399,
+      "maxWeightKg": 31.5,
+      "rule": {
+        "maxDimensions": {
+          "lengthCm": 120,
+          "widthCm": 60,
+          "heightCm": 60
+        }
+      },
+      "liabilityEuro": 500,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "filiale"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 699,
+          "coverageEuro": 2500
+        },
+        {
+          "kind": "insurance",
+          "priceCents": 1999,
+          "coverageEuro": 25000
+        }
+      ],
+      "bookingURL": null
+    },
+    {
+      "id": "hermes-shop-p",
+      "carrier": "hermes",
+      "family": "hermes-shop",
+      "product": "Päckchen · Zustellung PaketShop",
+      "channel": "online",
+      "priceCents": 399,
+      "maxWeightKg": 25,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 37,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 50,
+      "hasTracking": true,
+      "delivery": "shop",
+      "transitDays": "2–3",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.myhermes.de/versenden/"
+    },
+    {
+      "id": "hermes-shop-s",
+      "carrier": "hermes",
+      "family": "hermes-shop",
+      "product": "S-Paket · Zustellung PaketShop",
+      "channel": "online",
+      "priceCents": 489,
+      "maxWeightKg": 25,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 50,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 500,
+      "hasTracking": true,
+      "delivery": "shop",
+      "transitDays": "2–3",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.myhermes.de/versenden/"
+    },
+    {
+      "id": "hermes-shop-m",
+      "carrier": "hermes",
+      "family": "hermes-shop",
+      "product": "M-Paket · Zustellung PaketShop",
+      "channel": "online",
+      "priceCents": 590,
+      "maxWeightKg": 25,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 80,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 500,
+      "hasTracking": true,
+      "delivery": "shop",
+      "transitDays": "2–3",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.myhermes.de/versenden/"
+    },
+    {
+      "id": "hermes-shop-l",
+      "carrier": "hermes",
+      "family": "hermes-shop",
+      "product": "L-Paket · Zustellung PaketShop",
+      "channel": "online",
+      "priceCents": 990,
+      "maxWeightKg": 25,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 120,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 500,
+      "hasTracking": true,
+      "delivery": "shop",
+      "transitDays": "2–3",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.myhermes.de/versenden/"
+    },
+    {
+      "id": "hermes-home-p",
+      "carrier": "hermes",
+      "family": "hermes-home",
+      "product": "Päckchen",
+      "channel": "online",
+      "priceCents": 519,
+      "maxWeightKg": 25,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 37,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 50,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "2–3",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [
+        {
+          "kind": "pickup",
+          "priceCents": 6,
+          "coverageEuro": null
+        }
+      ],
+      "bookingURL": "https://www.myhermes.de/versenden/"
+    },
+    {
+      "id": "hermes-home-s",
+      "carrier": "hermes",
+      "family": "hermes-home",
+      "product": "S-Paket",
+      "channel": "online",
+      "priceCents": 579,
+      "maxWeightKg": 25,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 50,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 500,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "2–3",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [
+        {
+          "kind": "pickup",
+          "priceCents": 100,
+          "coverageEuro": null
+        }
+      ],
+      "bookingURL": "https://www.myhermes.de/versenden/"
+    },
+    {
+      "id": "hermes-home-m",
+      "carrier": "hermes",
+      "family": "hermes-home",
+      "product": "M-Paket",
+      "channel": "online",
+      "priceCents": 699,
+      "maxWeightKg": 25,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 80,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 500,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "2–3",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [
+        {
+          "kind": "pickup",
+          "priceCents": 96,
+          "coverageEuro": null
+        }
+      ],
+      "bookingURL": "https://www.myhermes.de/versenden/"
+    },
+    {
+      "id": "hermes-home-l",
+      "carrier": "hermes",
+      "family": "hermes-home",
+      "product": "L-Paket",
+      "channel": "online",
+      "priceCents": 1099,
+      "maxWeightKg": 25,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 120,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 500,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "2–3",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [
+        {
+          "kind": "pickup",
+          "priceCents": 96,
+          "coverageEuro": null
+        }
+      ],
+      "bookingURL": "https://www.myhermes.de/versenden/"
+    },
+    {
+      "id": "hermes-home-xl",
+      "carrier": "hermes",
+      "family": "hermes-home",
+      "product": "XL-Paket",
+      "channel": "online",
+      "priceCents": 2899,
+      "maxWeightKg": 25,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 150,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 500,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "2–3",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.myhermes.de/versenden/"
+    },
+    {
+      "id": "dpd-shop-xs",
+      "carrier": "dpd",
+      "family": "dpd-shop",
+      "product": "Paket XS · Shop2Shop",
+      "channel": "online",
+      "priceCents": 359,
+      "maxWeightKg": 20,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 35,
+          "maxLengthCm": 100
+        }
+      },
+      "liabilityEuro": 265,
+      "hasTracking": true,
+      "delivery": "shop",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.dpd.com/de/de/versenden/"
+    },
+    {
+      "id": "dpd-shop-s",
+      "carrier": "dpd",
+      "family": "dpd-shop",
+      "product": "Paket S · Shop2Shop",
+      "channel": "online",
+      "priceCents": 409,
+      "maxWeightKg": 20,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 50,
+          "maxLengthCm": 100
+        }
+      },
+      "liabilityEuro": 265,
+      "hasTracking": true,
+      "delivery": "shop",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.dpd.com/de/de/versenden/"
+    },
+    {
+      "id": "dpd-shop-m",
+      "carrier": "dpd",
+      "family": "dpd-shop",
+      "product": "Paket M · Shop2Shop",
+      "channel": "online",
+      "priceCents": 578,
+      "maxWeightKg": 20,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 70,
+          "maxLengthCm": 100
+        }
+      },
+      "liabilityEuro": 265,
+      "hasTracking": true,
+      "delivery": "shop",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.dpd.com/de/de/versenden/"
+    },
+    {
+      "id": "dpd-shop-l",
+      "carrier": "dpd",
+      "family": "dpd-shop",
+      "product": "Paket L · Shop2Shop",
+      "channel": "online",
+      "priceCents": 1079,
+      "maxWeightKg": 20,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 90,
+          "maxLengthCm": 100
+        }
+      },
+      "liabilityEuro": 265,
+      "hasTracking": true,
+      "delivery": "shop",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.dpd.com/de/de/versenden/"
+    },
+    {
+      "id": "dpd-classic-xs",
+      "carrier": "dpd",
+      "family": "dpd-classic",
+      "product": "Paket XS",
+      "channel": "online",
+      "priceCents": 515,
+      "maxWeightKg": 31.5,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 35,
+          "maxLengthCm": 175
+        }
+      },
+      "liabilityEuro": 520,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [
+        {
+          "kind": "pickup",
+          "priceCents": 314,
+          "coverageEuro": null
+        }
+      ],
+      "bookingURL": "https://www.dpd.com/de/de/versenden/"
+    },
+    {
+      "id": "dpd-classic-s",
+      "carrier": "dpd",
+      "family": "dpd-classic",
+      "product": "Paket S",
+      "channel": "online",
+      "priceCents": 545,
+      "maxWeightKg": 31.5,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 50,
+          "maxLengthCm": 175
+        }
+      },
+      "liabilityEuro": 520,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [
+        {
+          "kind": "pickup",
+          "priceCents": 284,
+          "coverageEuro": null
+        }
+      ],
+      "bookingURL": "https://www.dpd.com/de/de/versenden/"
+    },
+    {
+      "id": "dpd-classic-m",
+      "carrier": "dpd",
+      "family": "dpd-classic",
+      "product": "Paket M",
+      "channel": "online",
+      "priceCents": 695,
+      "maxWeightKg": 31.5,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 70,
+          "maxLengthCm": 175
+        }
+      },
+      "liabilityEuro": 520,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [
+        {
+          "kind": "pickup",
+          "priceCents": 495,
+          "coverageEuro": null
+        }
+      ],
+      "bookingURL": "https://www.dpd.com/de/de/versenden/"
+    },
+    {
+      "id": "dpd-classic-l",
+      "carrier": "dpd",
+      "family": "dpd-classic",
+      "product": "Paket L",
+      "channel": "online",
+      "priceCents": 1095,
+      "maxWeightKg": 31.5,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 90,
+          "maxLengthCm": 175
+        }
+      },
+      "liabilityEuro": 520,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [
+        {
+          "kind": "pickup",
+          "priceCents": 774,
+          "coverageEuro": null
+        }
+      ],
+      "bookingURL": "https://www.dpd.com/de/de/versenden/"
+    },
+    {
+      "id": "dpd-classic-xl",
+      "carrier": "dpd",
+      "family": "dpd-classic",
+      "product": "Paket XL",
+      "channel": "online",
+      "priceCents": 1869,
+      "maxWeightKg": 31.5,
+      "rule": {
+        "girth": {
+          "maxGirthCm": 300,
+          "maxLengthCm": 175
+        }
+      },
+      "liabilityEuro": 520,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [
+        {
+          "kind": "pickup",
+          "priceCents": 731,
+          "coverageEuro": null
+        }
+      ],
+      "bookingURL": "https://www.dpd.com/de/de/versenden/"
+    },
+    {
+      "id": "gls-shop-xs",
+      "carrier": "gls",
+      "family": "gls-shop",
+      "product": "Paket XS · Zustellung PaketShop",
+      "channel": "online",
+      "priceCents": 329,
+      "maxWeightKg": 40,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 35,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 750,
+      "hasTracking": true,
+      "delivery": "shop",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+    },
+    {
+      "id": "gls-home-xs",
+      "carrier": "gls",
+      "family": "gls-home",
+      "product": "Paket XS",
+      "channel": "online",
+      "priceCents": 459,
+      "maxWeightKg": 40,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 35,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 750,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+    },
+    {
+      "id": "gls-shop-s",
+      "carrier": "gls",
+      "family": "gls-shop",
+      "product": "Paket S · Zustellung PaketShop",
+      "channel": "online",
+      "priceCents": 389,
+      "maxWeightKg": 40,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 50,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 750,
+      "hasTracking": true,
+      "delivery": "shop",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+    },
+    {
+      "id": "gls-home-s",
+      "carrier": "gls",
+      "family": "gls-home",
+      "product": "Paket S",
+      "channel": "online",
+      "priceCents": 549,
+      "maxWeightKg": 40,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 50,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 750,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+    },
+    {
+      "id": "gls-shop-m",
+      "carrier": "gls",
+      "family": "gls-shop",
+      "product": "Paket M · Zustellung PaketShop",
+      "channel": "online",
+      "priceCents": 559,
+      "maxWeightKg": 40,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 70,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 750,
+      "hasTracking": true,
+      "delivery": "shop",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+    },
+    {
+      "id": "gls-home-m",
+      "carrier": "gls",
+      "family": "gls-home",
+      "product": "Paket M",
+      "channel": "online",
+      "priceCents": 689,
+      "maxWeightKg": 40,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 70,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 750,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+    },
+    {
+      "id": "gls-shop-l",
+      "carrier": "gls",
+      "family": "gls-shop",
+      "product": "Paket L · Zustellung PaketShop",
+      "channel": "online",
+      "priceCents": 1000,
+      "maxWeightKg": 40,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 90,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 750,
+      "hasTracking": true,
+      "delivery": "shop",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+    },
+    {
+      "id": "gls-home-l",
+      "carrier": "gls",
+      "family": "gls-home",
+      "product": "Paket L",
+      "channel": "online",
+      "priceCents": 1099,
+      "maxWeightKg": 40,
+      "rule": {
+        "longestPlusShortest": {
+          "maxSumCm": 90,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 750,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+    },
+    {
+      "id": "gls-shop-xl",
+      "carrier": "gls",
+      "family": "gls-shop",
+      "product": "Paket XL · Zustellung PaketShop",
+      "channel": "online",
+      "priceCents": 2200,
+      "maxWeightKg": 40,
+      "rule": {
+        "girth": {
+          "maxGirthCm": 300,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 750,
+      "hasTracking": true,
+      "delivery": "shop",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+    },
+    {
+      "id": "gls-home-xl",
+      "carrier": "gls",
+      "family": "gls-home",
+      "product": "Paket XL",
+      "channel": "online",
+      "priceCents": 2399,
+      "maxWeightKg": 40,
+      "rule": {
+        "girth": {
+          "maxGirthCm": 300,
+          "maxLengthCm": null
+        }
+      },
+      "liabilityEuro": 750,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+    },
+    {
+      "id": "ups-standard-5kg",
+      "carrier": "ups",
+      "family": "ups-standard",
+      "product": "Standard bis 5 kg",
+      "channel": "online",
+      "priceCents": 828,
+      "maxWeightKg": 5,
+      "rule": {
+        "volumetric": {
+          "divisor": 5000,
+          "maxLengthCm": 274
+        }
+      },
+      "liabilityEuro": null,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.ups.com/de/de/shipping"
+    },
+    {
+      "id": "ups-standard-10kg",
+      "carrier": "ups",
+      "family": "ups-standard",
+      "product": "Standard bis 10 kg",
+      "channel": "online",
+      "priceCents": 1187,
+      "maxWeightKg": 10,
+      "rule": {
+        "volumetric": {
+          "divisor": 5000,
+          "maxLengthCm": 274
+        }
+      },
+      "liabilityEuro": null,
+      "hasTracking": true,
+      "delivery": "home",
+      "transitDays": "1–2",
+      "dropOff": [
+        "paketshop"
+      ],
+      "addOns": [],
+      "bookingURL": "https://www.ups.com/de/de/shipping"
+    }
+  ]
+}

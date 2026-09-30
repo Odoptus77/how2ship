@@ -21,7 +21,7 @@ final class AppStore {
 
     init() {
         do {
-            catalog = try TariffCatalog.bundledSample()
+            catalog = try TariffCatalog.bundledCurrent()
         } catch {
             catalog = TariffCatalog(version: "leer", validFrom: "–", isSample: true, tariffs: [])
             catalogError = "Tarifdaten konnten nicht geladen werden."

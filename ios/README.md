@@ -41,7 +41,7 @@ ios/
 │   │   ├── Shipment.swift           Sendung, Status, Ereignisse
 │   │   ├── BoxMeasurement.swift     Rechenlogik der Kamera-Vermessung (Punkte → L × B × H)
 │   │   ├── Locations/               Abgabestellen: Modell, DHL- & Overpass-Parser, OSM-Öffnungszeiten
-│   │   └── Resources/tarife-beispiel.json   ⚠️ BEISPIELPREISE
+│   │   └── Resources/tarife-2026.json       echte Tarife (App) · tarife-beispiel.json nur für Tests
 │   └── Tests/PaketlotseCoreTests/
 └── Paketlotse/                      App (SwiftUI)
     ├── App/                         Einstieg, Tabs, Benachrichtigungs-Delegate
@@ -69,7 +69,7 @@ Orientiert an der Referenz „Job Finder UI Kit“:
 | Funktion | Status |
 |---|---|
 | Maße und Gewicht eingeben, Schnellauswahl | ✅ |
-| Tarifvergleich mit den Messregeln aller Paketdienste | ✅ (Beispielpreise) |
+| Tarifvergleich mit den Messregeln aller Paketdienste, **echte Privatkundenpreise 2026** (DHL, Hermes, DPD, GLS, UPS), Zustellung Haustür vs. PaketShop, Gurtmaß für XL | ✅ Stand 30.09.2026 |
 | Spar-Tipp, Hinweis „knapp an der Grenze“, Badges | ✅ |
 | Zusatzleistungen (Versicherung mit Warenwert, Sendungsverfolgung, Abholung, Unterschrift, Packstation) im Preis und als Filter | ✅ (Beispielpreise) |
 | „Jetzt buchen“: öffnet extern, merkt sich die offene Buchung | ✅ |
@@ -112,7 +112,7 @@ Orientiert an der Referenz „Job Finder UI Kit“:
 Variante B (Kartenpin mit Paket) ist im Asset-Katalog eingebaut, inklusive Dark- und Tinted-Variante (iOS 18+). Alle Einzelgrößen, die SVG-Quellen und ein ZIP liegen in `design/appicon/` (siehe `GROESSEN.md`).
 
 ## Wichtig vor einem Release
-- **Tarife:** `tarife-beispiel.json` enthält **Platzhalterpreise**. Vor dem Release mit den offiziellen Preislisten abgleichen und `isSample` auf `false` setzen.
+- **Tarife:** `tarife-2026.json` enthält die Privatkundenpreise mit Stand 30.09.2026. Quellen waren die Preisübersichten der Paketdienste und Fachportale. **Vor dem Release einmal direkt gegen die offiziellen Preislisten prüfen und danach regelmäßig aktualisieren**, am besten mit Erinnerung zu jeder Preisrunde. Bei Preisänderungen die erwarteten Werte in `CurrentCatalogTests` anpassen. Noch offen: UPS über 10 kg, Höherversicherung bei Hermes, DPD und GLS, Unterschrift-Optionen.
 - **Sendungsnummern:** Die Muster in `TrackingNumberDetector` sind Heuristiken und müssen mit echten Sendungsnummern geprüft werden. Dasselbe gilt für die Tracking-URLs in `Carrier.swift`.
 - **Logos:** Markenlogos der Paketdienste nur gemäß deren Richtlinien verwenden. Aktuell zeigt die App neutrale Farb-Avatare.
 

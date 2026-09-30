@@ -34,6 +34,7 @@ struct HomeView: View {
     @State private var pickup = false
     @State private var signature = false
     @State private var packstation = false
+    @State private var homeDelivery = false
     @State private var showResults = false
     @State private var showMeasure = false
     @State private var showSaveAlert = false
@@ -57,7 +58,8 @@ struct HomeView: View {
             requiresTracking: tracking,
             requiresPickup: pickup,
             requiresSignature: signature,
-            requiresPackstation: packstation
+            requiresPackstation: packstation,
+            requiresHomeDelivery: homeDelivery
         )
     }
 
@@ -201,6 +203,7 @@ struct HomeView: View {
         pickup = services.requiresPickup
         signature = services.requiresSignature
         packstation = services.requiresPackstation
+        homeDelivery = services.requiresHomeDelivery
         selectedPreset = preset.id
     }
 
@@ -209,7 +212,8 @@ struct HomeView: View {
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
                 ServiceChip(title: "Versichern", systemImage: "shield", isOn: $insure)
                 ServiceChip(title: "Sendungsverfolgung", systemImage: "location", isOn: $tracking)
-                ServiceChip(title: "Abholung", systemImage: "house", isOn: $pickup)
+                ServiceChip(title: "Haustür-Zustellung", systemImage: "door.left.hand.closed", isOn: $homeDelivery)
+                ServiceChip(title: "Abholung", systemImage: "shippingbox.and.arrow.backward", isOn: $pickup)
                 ServiceChip(title: "Unterschrift", systemImage: "signature", isOn: $signature)
                 ServiceChip(title: "Packstation", systemImage: "square.grid.3x3.square", isOn: $packstation)
             }

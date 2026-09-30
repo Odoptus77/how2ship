@@ -57,6 +57,14 @@ struct ProfileView: View {
                             systemImage: "calendar",
                             action: nil
                         )
+                        if let note = store.catalog.sourceNote {
+                            Text(note)
+                                .font(.lotse(11))
+                                .foregroundStyle(Theme.textSecondary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.leading, 52)
+                                .padding(.bottom, 8)
+                        }
                         Divider().padding(.leading, 52)
                         ProfileRow(title: "Datenschutz", systemImage: "hand.raised", action: nil)
                         Divider().padding(.leading, 52)

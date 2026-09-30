@@ -975,7 +975,7 @@
         "paketshop"
       ],
       "addOns": [],
-      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+      "bookingURL": "https://www.gls-pakete.de/privatkunden/paketversand/paketkonfiguration"
     },
     {
       "id": "gls-home-xs",
@@ -999,7 +999,7 @@
         "paketshop"
       ],
       "addOns": [],
-      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+      "bookingURL": "https://www.gls-pakete.de/privatkunden/paketversand/paketkonfiguration"
     },
     {
       "id": "gls-shop-s",
@@ -1023,7 +1023,7 @@
         "paketshop"
       ],
       "addOns": [],
-      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+      "bookingURL": "https://www.gls-pakete.de/privatkunden/paketversand/paketkonfiguration"
     },
     {
       "id": "gls-home-s",
@@ -1047,7 +1047,7 @@
         "paketshop"
       ],
       "addOns": [],
-      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+      "bookingURL": "https://www.gls-pakete.de/privatkunden/paketversand/paketkonfiguration"
     },
     {
       "id": "gls-shop-m",
@@ -1071,7 +1071,7 @@
         "paketshop"
       ],
       "addOns": [],
-      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+      "bookingURL": "https://www.gls-pakete.de/privatkunden/paketversand/paketkonfiguration"
     },
     {
       "id": "gls-home-m",
@@ -1095,7 +1095,7 @@
         "paketshop"
       ],
       "addOns": [],
-      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+      "bookingURL": "https://www.gls-pakete.de/privatkunden/paketversand/paketkonfiguration"
     },
     {
       "id": "gls-shop-l",
@@ -1119,7 +1119,7 @@
         "paketshop"
       ],
       "addOns": [],
-      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+      "bookingURL": "https://www.gls-pakete.de/privatkunden/paketversand/paketkonfiguration"
     },
     {
       "id": "gls-home-l",
@@ -1143,7 +1143,7 @@
         "paketshop"
       ],
       "addOns": [],
-      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+      "bookingURL": "https://www.gls-pakete.de/privatkunden/paketversand/paketkonfiguration"
     },
     {
       "id": "gls-shop-xl",
@@ -1167,7 +1167,7 @@
         "paketshop"
       ],
       "addOns": [],
-      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+      "bookingURL": "https://www.gls-pakete.de/privatkunden/paketversand/paketkonfiguration"
     },
     {
       "id": "gls-home-xl",
@@ -1191,7 +1191,7 @@
         "paketshop"
       ],
       "addOns": [],
-      "bookingURL": "https://www.gls-pakete.de/privat-versenden"
+      "bookingURL": "https://www.gls-pakete.de/privatkunden/paketversand/paketkonfiguration"
     },
     {
       "id": "ups-standard-5kg",

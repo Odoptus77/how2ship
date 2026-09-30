@@ -11,10 +11,12 @@ Native iOS-App, ab iOS 17. Die Geschäftslogik liegt im Swift-Package **Paketlot
 git clone <repo> && cd how2ship
 git checkout claude/how2ship-market-research-ockdkg
 cd ios
-xcodegen generate            # erzeugt Paketlotse.xcodeproj aus project.yml
+./generate.sh                # erzeugt Paketlotse.xcodeproj (legt beim 1. Mal Config/Secrets.xcconfig an)
 open Paketlotse.xcodeproj    # Simulator wählen (z. B. iPhone 15) → ⌘R
 ```
-Die `.xcodeproj` wird nicht eingecheckt. Nach neuen oder umbenannten Dateien einfach erneut `xcodegen generate` ausführen.
+Die `.xcodeproj` wird nicht eingecheckt. **Nach jedem `git pull` erneut `./generate.sh` ausführen**, sonst fehlen neue Dateien im Projekt (Fehler „Cannot find … in scope“).
+
+**Signing:** Trag deine Team-ID einmalig in `Config/Secrets.xcconfig` ein (`DEVELOPMENT_TEAM = …`). Du findest sie in Xcode unter *Einstellungen → Accounts* oder auf developer.apple.com unter *Membership*. Dann bleibt das Team auch nach dem Neugenerieren erhalten.
 
 **Tests der Kernlogik** (Tarifrechner, Spar-Tipps, Sendungsnummern, Abfrage-Regeln):
 ```bash

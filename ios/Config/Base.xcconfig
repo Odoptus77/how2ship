@@ -1,5 +1,10 @@
-// Gemeinsame Build-Einstellungen. Geheimnisse gehören in Secrets.xcconfig (nicht eingecheckt).
-// Vorlage: Secrets.example.xcconfig → nach Secrets.xcconfig kopieren und Key eintragen.
+// Gemeinsame Build-Einstellungen. Persönliches und Geheimes gehört in Secrets.xcconfig (nicht eingecheckt).
+// Vorlage: Secrets.example.xcconfig → nach Secrets.xcconfig kopieren und Werte eintragen.
+
+// Apple Developer Team (10-stellige Team-ID). Leer = in Xcode unter „Signing & Capabilities“ wählen,
+// geht aber bei jedem `xcodegen generate` verloren – daher besser in Secrets.xcconfig eintragen.
+DEVELOPMENT_TEAM =
+CODE_SIGN_STYLE = Automatic
 
 // DHL Location Finder – Unified API (https://developer.dhl.com). Leer = nur OpenStreetMap.
 DHL_API_KEY =

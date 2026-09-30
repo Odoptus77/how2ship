@@ -71,6 +71,34 @@ struct Chip: View {
     }
 }
 
+/// Umschaltbarer Chip mit Symbol für Zusatzleistungen (Versicherung, Abholung …).
+struct ServiceChip: View {
+    let title: String
+    let systemImage: String
+    @Binding var isOn: Bool
+
+    var body: some View {
+        Button { isOn.toggle() } label: {
+            HStack(spacing: 8) {
+                Image(systemName: isOn ? "checkmark.circle.fill" : systemImage)
+                    .font(.system(size: 15, weight: .semibold))
+                Text(title)
+                    .font(.lotse(14, .semibold))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.85)
+                Spacer(minLength: 0)
+            }
+            .foregroundStyle(isOn ? .white : Theme.textPrimary)
+            .padding(.horizontal, 14)
+            .frame(height: 46)
+            .background(isOn ? Theme.primary : Theme.surface, in: Capsule())
+            .shadow(color: .black.opacity(isOn ? 0.15 : 0.04), radius: 8, y: 4)
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isOn ? .isSelected : [])
+    }
+}
+
 /// Kleiner Info-Tag in Karten (z. B. „Online“, „Haftung 500 €“).
 struct Tag: View {
     let text: String

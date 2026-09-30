@@ -21,13 +21,17 @@ public struct SavingsAdvisor: Sendable {
         self.engine = engine
     }
 
-    public func bestTip(for parcel: ParcelDimensions, channels: Set<SalesChannel> = [.online]) -> SavingsTip? {
-        guard let current = engine.offers(for: parcel, channels: channels).first else { return nil }
+    public func bestTip(
+        for parcel: ParcelDimensions,
+        requirements: ShippingRequirements = .none,
+        channels: Set<SalesChannel> = [.online]
+    ) -> SavingsTip? {
+        guard let current = engine.offers(for: parcel, requirements: requirements, channels: channels).first else { return nil }
         var best: SavingsTip?
 
         func consider(_ adjustment: SavingsTip.Adjustment, _ candidate: ParcelDimensions) {
             guard candidate.isValid,
-                  let offer = engine.offers(for: candidate, channels: channels).first else { return }
+                  let offer = engine.offers(for: candidate, requirements: requirements, channels: channels).first else { return }
             let saving = current.priceCents - offer.priceCents
             guard saving > 0 else { return }
             // Bei gleicher Ersparnis gewinnt die kleinere Änderung (wird zuerst geprüft).

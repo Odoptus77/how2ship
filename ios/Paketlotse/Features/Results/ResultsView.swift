@@ -3,6 +3,7 @@ import PaketlotseCore
 
 struct ResultsView: View {
     let parcel: ParcelDimensions
+    var requirements: ShippingRequirements = .none
 
     @Environment(AppStore.self) private var store
     @Environment(\.openURL) private var openURL
@@ -14,8 +15,8 @@ struct ResultsView: View {
     }
 
     var body: some View {
-        let offers = store.engine.offers(for: parcel, channels: channels)
-        let tip = store.advisor.bestTip(for: parcel, channels: channels)
+        let offers = store.engine.offers(for: parcel, requirements: requirements, channels: channels)
+        let tip = store.advisor.bestTip(for: parcel, requirements: requirements, channels: channels)
 
         ScrollView {
             VStack(alignment: .leading, spacing: 18) {
@@ -34,7 +35,9 @@ struct ResultsView: View {
                     EmptyStateView(
                         systemImage: "exclamationmark.magnifyingglass",
                         title: "Kein passender Tarif",
-                        message: "Für diese Maße bzw. dieses Gewicht haben wir kein Angebot. Prüfe die Eingaben oder denk an Sperrgut-Versand."
+                        message: requirements.isEmpty
+                            ? "Für diese Maße bzw. dieses Gewicht haben wir kein Angebot. Prüfe die Eingaben oder denk an Sperrgut-Versand."
+                            : "Mit diesen Zusatzleistungen passt kein Tarif. Entferne z. B. die Versicherung, Abholung oder Unterschrift."
                     )
                 } else {
                     SectionHeader(title: "\(offers.count) passende Angebote")
@@ -62,10 +65,24 @@ struct ResultsView: View {
     }
 
     private var parcelSummary: some View {
-        HStack(spacing: 8) {
-            Tag(text: "\(Self.cm(parcel.lengthCm)) × \(Self.cm(parcel.widthCm)) × \(Self.cm(parcel.heightCm)) cm", systemImage: "cube", tint: Theme.primary, background: Theme.surface)
-            Tag(text: "\(parcel.weightKg.formatted(.number.precision(.fractionLength(0...1)).locale(Locale(identifier: "de_DE")))) kg", systemImage: "scalemass", tint: Theme.primary, background: Theme.surface)
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                summaryTag("\(Self.cm(parcel.lengthCm)) × \(Self.cm(parcel.widthCm)) × \(Self.cm(parcel.heightCm)) cm", "cube")
+                summaryTag("\(Self.cm(parcel.weightKg)) kg", "scalemass")
+                if let value = requirements.declaredValueEuro, value > 0 {
+                    summaryTag("Wert \(value.formatted(.number.locale(Locale(identifier: "de_DE")))) €", "shield")
+                }
+                if requirements.requiresTracking { summaryTag("Sendungsverfolgung", "location") }
+                if requirements.requiresPickup { summaryTag("Abholung", "house") }
+                if requirements.requiresSignature { summaryTag("Unterschrift", "signature") }
+                if requirements.requiresPackstation { summaryTag("Packstation", "square.grid.3x3.square") }
+            }
+            .padding(.vertical, 2)
         }
+    }
+
+    private func summaryTag(_ text: String, _ systemImage: String) -> some View {
+        Tag(text: text, systemImage: systemImage, tint: Theme.primary, background: Theme.surface)
     }
 
     /// Buchung läuft extern (Carrier-App bzw. Standardbrowser). Paketlotse liest dort nichts aus;
@@ -109,7 +126,7 @@ struct OfferCard: View {
                 Spacer()
 
                 VStack(alignment: .trailing, spacing: 6) {
-                    Text(Money.format(cents: tariff.priceCents))
+                    Text(Money.format(cents: offer.priceCents))
                         .font(.lotse(20, .heavy))
                         .foregroundStyle(offer.badges.contains(.cheapest) ? Theme.accent : Theme.primary)
                     if offer.badges.contains(.cheapest) {
@@ -122,7 +139,9 @@ struct OfferCard: View {
                 HStack(spacing: 6) {
                     Tag(text: tariff.channel == .online ? "Online" : "Filiale")
                     if tariff.hasTracking { Tag(text: "Sendungsverfolgung", systemImage: "location") }
-                    if let liability = tariff.liabilityEuro {
+                    if let insurance = offer.insurance, let coverage = insurance.coverageEuro {
+                        Tag(text: "Versichert bis \(coverage.formatted(.number.locale(Locale(identifier: "de_DE")))) €", systemImage: "checkmark.shield", tint: Theme.primary)
+                    } else if let liability = tariff.liabilityEuro {
                         Tag(text: "Haftung \(liability) €", systemImage: "shield")
                     } else {
                         Tag(text: "Ohne Haftung", systemImage: "shield.slash")
@@ -130,6 +149,10 @@ struct OfferCard: View {
                     if offer.badges.contains(.bestLiability) { Tag(text: "Beste Haftung", tint: Theme.primary) }
                     ForEach(tariff.dropOff, id: \.self) { Tag(text: $0.displayName) }
                 }
+            }
+
+            if !offer.addOns.isEmpty {
+                PriceBreakdown(offer: offer)
             }
 
             if offer.isTight {
@@ -148,6 +171,40 @@ struct OfferCard: View {
             }
         }
         .card()
+    }
+}
+
+/// Grundpreis plus eingerechnete Zusatzleistungen.
+struct PriceBreakdown: View {
+    let offer: Offer
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            row("Grundpreis", offer.basePriceCents)
+            ForEach(offer.addOns, id: \.self) { addOn in
+                row(label(for: addOn), addOn.priceCents, prefix: "+ ")
+            }
+        }
+        .font(.lotse(12))
+        .foregroundStyle(Theme.textSecondary)
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Theme.chip, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+    }
+
+    private func label(for addOn: AddOn) -> String {
+        if addOn.kind == .insurance, let coverage = addOn.coverageEuro {
+            return "Versicherung bis \(coverage.formatted(.number.locale(Locale(identifier: "de_DE")))) €"
+        }
+        return addOn.kind.displayName
+    }
+
+    private func row(_ title: String, _ cents: Int, prefix: String = "") -> some View {
+        HStack {
+            Text(title)
+            Spacer()
+            Text(cents == 0 ? "inklusive" : prefix + Money.format(cents: cents))
+        }
     }
 }
 

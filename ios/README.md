@@ -31,6 +31,7 @@ ios/
 │   │   ├── ParcelDimensions.swift   Maße, Messregeln (längste + kürzeste Seite, Volumengewicht)
 │   │   ├── Carrier.swift            Paketdienste, Tracking-Links
 │   │   ├── Tariff.swift             Tarif-Regelwerk + Katalog (JSON)
+│   │   ├── ShippingRequirements     Zusatzleistungen, Aufpreise, Versicherung
 │   │   ├── TariffEngine.swift       Vergleich: passende Tarife, sortiert nach Preis, Badges
 │   │   ├── SavingsAdvisor.swift     Spar-Tipp („2 cm kürzer → 0,69 € sparen“)
 │   │   ├── TrackingNumberDetector   Sendungsnummer erkennen / normalisieren / aus Text extrahieren
@@ -64,6 +65,7 @@ Orientiert an der Referenz „Job Finder UI Kit“:
 | Maße und Gewicht eingeben, Schnellauswahl | ✅ |
 | Tarifvergleich mit den Messregeln aller Paketdienste | ✅ (Beispielpreise) |
 | Spar-Tipp, Hinweis „knapp an der Grenze“, Badges | ✅ |
+| Zusatzleistungen (Versicherung mit Warenwert, Sendungsverfolgung, Abholung, Unterschrift, Packstation) im Preis und als Filter | ✅ (Beispielpreise) |
 | „Jetzt buchen“: öffnet extern, merkt sich die offene Buchung | ✅ |
 | **Abfrage der Sendungsnummer** bei Rückkehr (ab 60 s, bis 48 h, einmalig) | ✅ |
 | Eintippen, Einfügen (PasteButton), Barcode-Scan (VisionKit) | ✅ |

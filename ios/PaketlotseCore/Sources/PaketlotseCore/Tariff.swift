@@ -24,12 +24,13 @@ public struct Tariff: Codable, Hashable, Identifiable, Sendable {
     public var hasTracking: Bool
     public var transitDays: String?
     public var dropOff: [DropOffOption]
+    public var addOns: [AddOn]
     public var bookingURL: URL?
 
     public init(
         id: String, carrier: Carrier, family: String, product: String, channel: SalesChannel,
         priceCents: Int, maxWeightKg: Double, rule: SizeRule, liabilityEuro: Int?,
-        hasTracking: Bool, transitDays: String?, dropOff: [DropOffOption], bookingURL: URL?
+        hasTracking: Bool, transitDays: String?, dropOff: [DropOffOption], addOns: [AddOn] = [], bookingURL: URL?
     ) {
         self.id = id
         self.carrier = carrier
@@ -43,6 +44,7 @@ public struct Tariff: Codable, Hashable, Identifiable, Sendable {
         self.hasTracking = hasTracking
         self.transitDays = transitDays
         self.dropOff = dropOff
+        self.addOns = addOns
         self.bookingURL = bookingURL
     }
 

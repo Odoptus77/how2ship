@@ -1,5 +1,5 @@
 {
-  "_hinweis": "BEISPIELDATEN – Preise, Maße und Haftung sind Platzhalter und müssen vor dem Release mit den offiziellen Preislisten der Paketdienste abgeglichen werden.",
+  "_hinweis": "BEISPIELDATEN – Preise, Maße und Haftung sind Platzhalter und müssen vor dem Release mit den offiziellen Preislisten der Paketdienste abgeglichen werden. Das gilt auch für Zusatzleistungen (Versicherung, Abholung, Unterschrift).",
   "version": "beispiel-0.1",
   "validFrom": "2026-01-01",
   "isSample": true,
@@ -27,6 +27,7 @@
         "paketshop",
         "packstation"
       ],
+      "addOns": [],
       "bookingURL": "https://www.dhl.de/de/privatkunden/pakete-versenden/online-frankieren.html"
     },
     {
@@ -52,6 +53,7 @@
         "paketshop",
         "packstation"
       ],
+      "addOns": [],
       "bookingURL": "https://www.dhl.de/de/privatkunden/pakete-versenden/online-frankieren.html"
     },
     {
@@ -75,8 +77,24 @@
       "dropOff": [
         "filiale",
         "paketshop",
-        "packstation",
-        "abholung"
+        "packstation"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 600,
+          "coverageEuro": 2500
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 350,
+          "coverageEuro": null
+        },
+        {
+          "kind": "signature",
+          "priceCents": 250,
+          "coverageEuro": null
+        }
       ],
       "bookingURL": "https://www.dhl.de/de/privatkunden/pakete-versenden/online-frankieren.html"
     },
@@ -101,8 +119,24 @@
       "dropOff": [
         "filiale",
         "paketshop",
-        "packstation",
-        "abholung"
+        "packstation"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 600,
+          "coverageEuro": 2500
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 350,
+          "coverageEuro": null
+        },
+        {
+          "kind": "signature",
+          "priceCents": 250,
+          "coverageEuro": null
+        }
       ],
       "bookingURL": "https://www.dhl.de/de/privatkunden/pakete-versenden/online-frankieren.html"
     },
@@ -127,8 +161,24 @@
       "dropOff": [
         "filiale",
         "paketshop",
-        "packstation",
-        "abholung"
+        "packstation"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 600,
+          "coverageEuro": 2500
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 350,
+          "coverageEuro": null
+        },
+        {
+          "kind": "signature",
+          "priceCents": 250,
+          "coverageEuro": null
+        }
       ],
       "bookingURL": "https://www.dhl.de/de/privatkunden/pakete-versenden/online-frankieren.html"
     },
@@ -152,8 +202,24 @@
       "transitDays": "1–2",
       "dropOff": [
         "filiale",
-        "paketshop",
-        "abholung"
+        "paketshop"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 600,
+          "coverageEuro": 2500
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 350,
+          "coverageEuro": null
+        },
+        {
+          "kind": "signature",
+          "priceCents": 250,
+          "coverageEuro": null
+        }
       ],
       "bookingURL": "https://www.dhl.de/de/privatkunden/pakete-versenden/online-frankieren.html"
     },
@@ -179,6 +245,18 @@
         "filiale",
         "paketshop"
       ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 600,
+          "coverageEuro": 2500
+        },
+        {
+          "kind": "signature",
+          "priceCents": 250,
+          "coverageEuro": null
+        }
+      ],
       "bookingURL": null
     },
     {
@@ -199,8 +277,19 @@
       "hasTracking": true,
       "transitDays": "2–3",
       "dropOff": [
-        "paketshop",
-        "abholung"
+        "paketshop"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 150,
+          "coverageEuro": 500
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 200,
+          "coverageEuro": null
+        }
       ],
       "bookingURL": "https://www.myhermes.de/versenden/"
     },
@@ -222,8 +311,19 @@
       "hasTracking": true,
       "transitDays": "2–3",
       "dropOff": [
-        "paketshop",
-        "abholung"
+        "paketshop"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 150,
+          "coverageEuro": 500
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 200,
+          "coverageEuro": null
+        }
       ],
       "bookingURL": "https://www.myhermes.de/versenden/"
     },
@@ -245,8 +345,19 @@
       "hasTracking": true,
       "transitDays": "2–3",
       "dropOff": [
-        "paketshop",
-        "abholung"
+        "paketshop"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 150,
+          "coverageEuro": 500
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 200,
+          "coverageEuro": null
+        }
       ],
       "bookingURL": "https://www.myhermes.de/versenden/"
     },
@@ -270,6 +381,18 @@
       "dropOff": [
         "paketshop"
       ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 300,
+          "coverageEuro": 1000
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 250,
+          "coverageEuro": null
+        }
+      ],
       "bookingURL": "https://www.dpd.com/de/de/versenden/"
     },
     {
@@ -291,6 +414,18 @@
       "transitDays": "1–2",
       "dropOff": [
         "paketshop"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 300,
+          "coverageEuro": 1000
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 250,
+          "coverageEuro": null
+        }
       ],
       "bookingURL": "https://www.dpd.com/de/de/versenden/"
     },
@@ -314,6 +449,18 @@
       "dropOff": [
         "paketshop"
       ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 300,
+          "coverageEuro": 1000
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 250,
+          "coverageEuro": null
+        }
+      ],
       "bookingURL": "https://www.dpd.com/de/de/versenden/"
     },
     {
@@ -336,6 +483,7 @@
       "dropOff": [
         "paketshop"
       ],
+      "addOns": [],
       "bookingURL": "https://www.gls-pakete.de/privatkunden/paket-versenden"
     },
     {
@@ -358,6 +506,7 @@
       "dropOff": [
         "paketshop"
       ],
+      "addOns": [],
       "bookingURL": "https://www.gls-pakete.de/privatkunden/paket-versenden"
     },
     {
@@ -380,6 +529,7 @@
       "dropOff": [
         "paketshop"
       ],
+      "addOns": [],
       "bookingURL": "https://www.gls-pakete.de/privatkunden/paket-versenden"
     },
     {
@@ -400,8 +550,24 @@
       "hasTracking": true,
       "transitDays": "1–2",
       "dropOff": [
-        "paketshop",
-        "abholung"
+        "paketshop"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 400,
+          "coverageEuro": 1000
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 0,
+          "coverageEuro": null
+        },
+        {
+          "kind": "signature",
+          "priceCents": 400,
+          "coverageEuro": null
+        }
       ],
       "bookingURL": "https://www.ups.com/de/de/shipping"
     },
@@ -423,8 +589,24 @@
       "hasTracking": true,
       "transitDays": "1–2",
       "dropOff": [
-        "paketshop",
-        "abholung"
+        "paketshop"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 400,
+          "coverageEuro": 1000
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 0,
+          "coverageEuro": null
+        },
+        {
+          "kind": "signature",
+          "priceCents": 400,
+          "coverageEuro": null
+        }
       ],
       "bookingURL": "https://www.ups.com/de/de/shipping"
     },
@@ -446,8 +628,24 @@
       "hasTracking": true,
       "transitDays": "1–2",
       "dropOff": [
-        "paketshop",
-        "abholung"
+        "paketshop"
+      ],
+      "addOns": [
+        {
+          "kind": "insurance",
+          "priceCents": 400,
+          "coverageEuro": 1000
+        },
+        {
+          "kind": "pickup",
+          "priceCents": 0,
+          "coverageEuro": null
+        },
+        {
+          "kind": "signature",
+          "priceCents": 400,
+          "coverageEuro": null
+        }
       ],
       "bookingURL": "https://www.ups.com/de/de/shipping"
     }

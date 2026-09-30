@@ -68,6 +68,12 @@
 - Schnellauswahl: „Schuhkarton“, „Weinflasche“, „Brief-dick“ usw.
 - Premium: eigene gespeicherte Paketgrößen („Mein Standardkarton“)
 
+**Zusatzleistungen** (direkt unter der Schnellauswahl, fließen in Filter und Gesamtpreis ein):
+- **Versichern** mit Warenwert (Schnellwerte 100, 500, 1.000 und 2.500 €): Liegt der Wert über der Grundhaftung, wird die günstigste passende Höherversicherung eingerechnet. Tarife ohne ausreichende Absicherung fallen heraus.
+- **Sendungsverfolgung**, **Abholung** (mit Aufpreis), **Unterschrift** (mit Aufpreis), **Abgabe an Packstation**
+- Die Schnellauswahl setzt passende Leistungen vor. Beispiel Laptop: versichert bis 1.000 € plus Sendungsverfolgung.
+- Die Ergebnisse zeigen den **Gesamtpreis** und eine Aufschlüsselung (Grundpreis + Zusatzleistungen).
+
 **Kamera-Vermessung**
 - Auf dem iPhone per ARKit, auf Geräten mit LiDAR (Tiefensensor) noch genauer. Auf Android per ARCore.
 - Ablauf:

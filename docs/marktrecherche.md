@@ -191,6 +191,116 @@ Parcello, Parcel, Paketverfolgung & Parcel Track, Tracker Parcel und weitere. Si
 
 ---
 
+## 9. Monetarisierungsmodell (nur KEP, Privatkunden in Deutschland)
+
+**Rahmen:**
+- Zielgruppe sind Privatpersonen in Deutschland, die gelegentlich Pakete verschicken.
+- Alle Einnahmen kommen aus dem Paketversand selbst, also keine Partnerprogramme für Kartons, Umzüge usw.
+- Kamera-Vermessung und Preisvergleich sind **unbegrenzt kostenlos**, ein Kontingent gibt es nicht.
+
+### 9.1 Grundprinzip
+
+> **Der Vergleich ist neutral und kostenlos. Geld verdient die App bei der Buchung, mit Komfortfunktionen und mit dezenter Werbung.**
+
+Die Ergebnisliste ist **immer nach dem Gesamtpreis sortiert**. Provision und Werbung dürfen die Reihenfolge nie beeinflussen. Das ist die Grundlage für das Vertrauen der Nutzer und für die Bewertungen im App Store.
+
+### 9.2 Einnahmequellen
+
+| # | Einnahmequelle | Ab Phase | Preis bzw. Vergütung | Anteil am Umsatz (Ziel) |
+|---|---|---|---|---|
+| **A** | **Provision bei Buchung** über Versandportale (Packlink bis ca. 5 € pro Buchung, Eurosender 7 %) | 1 | ca. 1,50 bis 5 € pro Buchung | Phase 1: ca. 60 % |
+| **B** | **how2send Premium**, einmaliger Kauf in der App | 1 | 2,99 € | ca. 20 % |
+| **C** | **Werbung** in der kostenlosen Version: Banner und klar gekennzeichnete Anzeigen von Versandanbietern | 1 | nach Einblendung bzw. Festpreis pro Monat | ca. 20 % |
+| **D** | **Eigener Label-Verkauf**: Das Versandlabel wird direkt in der App gekauft, über einen Zwischenhändler oder eine Versand-API | 2 | Marge ca. 0,50 bis 1,50 € pro Label | ab Phase 2 der Hauptumsatz |
+| **E** | **Hervorgehobene Paketshops** auf der Karte | 3 | ca. 5 bis 15 € pro Monat und Shop | Zusatzeinnahme |
+
+#### A. Provision bei Buchung
+- Unter jedem Tarif steht ein Button **„Jetzt buchen“**:
+  - Ist ein Versandportal mit Partnerprogramm günstiger oder gleich teuer, verlinkt der Button per Affiliate-Link dorthin. Die App erhält die Provision.
+  - Ist der Paketdienst direkt am günstigsten (z. B. DHL online), verlinkt der Button ohne Provision direkt zum Paketdienst. Die Neutralität geht vor.
+- Beim Start registrierst du dich bei den Partnerprogrammen über Netzwerke wie Awin, affilinet usw. Parallel dazu fragst du **direkt bei Hermes, DPD, GLS und UPS** nach Kooperationen.
+- Die wichtigste Kennzahl ist der **Anteil der Vergleiche, die zu einer Buchung mit Provision führen**.
+
+#### B. how2send Premium: 2,99 € einmalig
+| Kostenlos | Premium |
+|---|---|
+| Preisvergleich aller Paketdienste | ✔ |
+| Kamera-Vermessung (unbegrenzt) | ✔ |
+| Karte mit Paketshops und Packstationen | ✔ |
+| Dezente Banner | **Werbefrei** |
+| – | **Gespeicherte Paketgrößen**, z. B. „Mein Schuhkarton“ |
+| – | **Versandverlauf** mit allen Kosten des Jahres |
+| – | **Preisalarm**, wenn ein Paketdienst die Preise ändert |
+| – | **Adressbuch** für häufige Empfänger (wichtig ab Phase 2) |
+
+- Die Freischaltung ist ein digitales Gut. Sie muss deshalb über den Kauf im App Store bzw. bei Google Play laufen. Die Gebühr beträgt 15 % über das Small Business Program bzw. die reduzierte Rate bei Google.
+- Später kann ein Abo (z. B. 0,99 € im Monat) getestet werden. Zum Start ist ein Einmalkauf aber einfacher zu verkaufen.
+
+#### C. Werbung
+- **Programmatische Banner** (AdMob o. Ä.), nur in der kostenlosen Version und **nie als Vollbild vor der Ergebnisliste**.
+- **Direkte Anzeigen von Versandanbietern** innerhalb des KEP-Bereichs. Beispiel: „Hermes: Jetzt 1 € sparen mit dem Code …“. Diese stehen als **„Anzeige“ gekennzeichnet** über oder unter der Liste und verändern nie die Reihenfolge der Ergebnisse. Das lohnt sich erst ab einer gewissen Reichweite, dafür aber mit einem Festpreis pro Monat.
+- Für personalisierte Werbung braucht die App ein **Einwilligungs-Management**: auf iOS die Tracking-Abfrage (App Tracking Transparency, ATT), dazu das europäische Einwilligungs-Framework (IAB TCF).
+
+#### D. Eigener Label-Verkauf (Phase 2)
+- Der Nutzer bezahlt direkt in how2send per PayPal, Apple Pay oder Karte und erhält das Versandlabel oder einen QR-Code für den Paketshop.
+- Umsetzung über einen **Zwischenhändler mit API** (z. B. Packlink- oder Eurosender-API, oder ein Label-Anbieter mit Rahmenverträgen). Später kommen eigene Verträge mit den Paketdiensten dazu, wenn das Volumen reicht.
+- Die Versandleistung ist eine **physische Dienstleistung**. Sie darf deshalb **außerhalb** des App-Store-Bezahlsystems abgerechnet werden (Apple Guideline 3.1.5), es fallen also keine 15 % Store-Gebühr an.
+- Das ist der **eigentliche Hebel**: Die Marge fällt bei jedem Paket an, egal über welchen Paketdienst.
+
+#### E. Hervorgehobene Paketshops (Phase 3)
+- Paketshops (Kioske, Tankstellen usw.) können sich auf der Karte hervorheben lassen, etwa mit Öffnungszeiten, Foto und „Auch sonntags geöffnet“.
+- Das lohnt sich erst mit vielen Nutzern pro Stadt. Die Shops verdienen nur ca. 0,30 bis 0,60 € pro Paket und haben entsprechend wenig Budget.
+
+### 9.3 Phasen
+
+| Phase | Zeitraum | Funktionen | Einnahmen |
+|---|---|---|---|
+| **1. Start** | Monat 0 bis 6 | Vergleich, Kamera-Vermessung, Karte, Buchen-Button | A, B, C |
+| **2. Buchung in der App** | Monat 6 bis 18 | Label-Kauf in der App, Adressbuch, Versandverlauf | D wird zur Haupteinnahme |
+| **3. Ausbau** | ab Monat 18 | Paketshop-Einträge, Kooperationen mit Paketdiensten, Abo testen | E, direkte Anzeigen |
+
+### 9.4 Beispielrechnung
+
+> ⚠️ **Das sind Annahmen, keine Marktdaten.** Sie müssen mit echten Nutzerzahlen überprüft werden.
+
+**Annahmen für Jahr 1:** 30.000 Downloads, im Schnitt 8.000 aktive Nutzer pro Monat, je 1,5 Vergleiche pro Monat, also 12.000 Vergleiche im Monat.
+
+| Einnahmequelle | Rechnung | pro Jahr |
+|---|---|---|
+| A. Provision | 12.000 × 3 % Buchung mit Provision × 3 € × 12 Monate | ca. 13.000 € |
+| B. Premium | 30.000 × 2 % Kaufquote × 2,99 € × 0,85 | ca. 1.500 € |
+| C. Werbung | 8.000 × 1,5 × 3 Einblendungen × 1,50 € pro 1.000 × 12 Monate | ca. 650 € |
+| **Summe Jahr 1** | | **ca. 15.000 €** |
+
+**Mit Label-Verkauf (Phase 2):** Jeder Anteil der Vergleiche, der direkt in der App gebucht wird, bringt eine Marge. Bei 60.000 aktiven Nutzern pro Monat, 90.000 Vergleichen und 10 % Buchungen in der App sind das 9.000 Labels im Monat. Mit 1 € Marge ergibt das **ca. 108.000 € pro Jahr**, dazu kommen A bis C.
+
+**Fazit:** Ohne Label-Verkauf bleibt die App ein Nebenprojekt. Das Geschäft entsteht mit **Phase 2**. Phase 1 dient vor allem dazu, Nutzer zu gewinnen und zu prüfen, ob die App angenommen wird.
+
+### 9.5 Kosten (grob)
+- Apple Developer: 99 $ pro Jahr, Google Play: 25 $ einmalig
+- Server, Datenbank und Karten-API: ca. 20 bis 100 € pro Monat zum Start
+- **Tarife aktuell halten:** Die Preise ändern sich jährlich, dazu kommen Zuschläge. Das kostet laufend Zeit. Plane pro Jahr eine Kontrollrunde plus eine Benachrichtigung bei Preisänderungen ein.
+- Rechtliches: Impressum, Datenschutz, AGB, eventuell eine anwaltliche Prüfung (einmalig ca. 500 bis 1.500 €)
+
+### 9.6 Rechtliche Leitplanken
+- **Ranking offenlegen (§ 5b UWG):** Die App muss nennen, wonach sie sortiert (Gesamtpreis) und dass Affiliate-Provisionen anfallen können, die das Ranking **nicht** beeinflussen.
+- **Werbung kennzeichnen (§ 5a UWG):** Affiliate-Links und Anzeigen sind klar als „Anzeige“ bzw. „Partner-Link“ gekennzeichnet.
+- **Preise korrekt angeben (PAngV):** Es werden Endpreise inklusive Mehrwertsteuer angezeigt, dazu der Stand der Tarife („Preise Stand 01/2026“) und ein Haftungsausschluss für Zuschläge.
+- **Datenschutz (DSGVO und TTDSG):** Einwilligung für Werbe-Tracking. Die Kamera-Bilder werden nur auf dem Gerät verarbeitet und nicht hochgeladen, das ist auch ein gutes Verkaufsargument.
+
+### 9.7 Kennzahlen
+| Kennzahl | Ziel Jahr 1 |
+|---|---|
+| Downloads | 30.000 |
+| Aktive Nutzer pro Monat | 8.000 |
+| Vergleiche pro aktivem Nutzer und Monat | ≥ 1,5 |
+| Anteil Klicks auf „Buchen“ | ≥ 15 % |
+| Anteil Buchungen mit Provision | ≥ 3 % aller Vergleiche |
+| Premium-Kaufquote | ≥ 2 % der Downloads |
+| App-Store-Bewertung | ≥ 4,5 ★ |
+
+---
+
 ## Quellen
 
 - Packlink Preisvergleich: https://www.packlink.com/de-DE/paketversand-preisvergleich/
@@ -227,3 +337,5 @@ Parcello, Parcel, Paketverfolgung & Parcel Track, Tracker Parcel und weitere. Si
 - Parcel2Go App (Google Play): https://play.google.com/store/apps/details?id=com.parcel2go.parcel2goapp
 - Parcel2Go Trustpilot: https://www.trustpilot.com/review/www.parcel2go.com
 - Pirate Ship / Shippo / Easyship Vergleich: https://www.aftership.com/blog/easyship-vs-pirate-ship-vs-shippo
+- Eurosender Partnerprogramm (7 %): https://www.affiliate-marketing.de/partnerprogramme/eurosender.com
+- Paketshop-Vergütung (paketda): https://www.paketda.de/news-kurznachrichten-20191213.html

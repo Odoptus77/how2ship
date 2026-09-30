@@ -2,33 +2,36 @@ import XCTest
 @testable import PaketlotseCore
 
 final class BoxMeasurementTests: XCTestCase {
-    /// Karton 40 × 30 × 12 cm auf dem Boden (y = 0), Maße in Metern.
+    /// Karton 40 × 30 × 12 cm, jede Strecke einzeln gemessen (Meter).
     private func measuredBox() -> BoxMeasurement {
         var m = BoxMeasurement()
-        m.add(SIMD3(0, 0, 0))
-        m.add(SIMD3(0.40, 0, 0))
-        m.add(SIMD3(0.40, 0, 0.30))
-        m.add(SIMD3(0.20, 0.12, 0.15))
+        m.add(SIMD3(0, 0, 0)); m.add(SIMD3(0.40, 0, 0))            // Länge
+        m.add(SIMD3(0.40, 0, 0)); m.add(SIMD3(0.40, 0, 0.30))      // Breite
+        m.add(SIMD3(0.40, 0, 0.30)); m.add(SIMD3(0.40, 0.12, 0.30)) // Höhe
         return m
     }
 
-    func testStepsProgress() {
+    func testDimensionsProgressInPairs() {
         var m = BoxMeasurement()
-        XCTAssertEqual(m.currentStep, .firstCorner)
+        XCTAssertEqual(m.currentDimension, .length)
+        XCTAssertFalse(m.isAwaitingSecondPoint)
         m.add(SIMD3(0, 0, 0))
-        XCTAssertEqual(m.currentStep, .secondCorner)
+        XCTAssertEqual(m.currentDimension, .length)
+        XCTAssertTrue(m.isAwaitingSecondPoint)
         m.add(SIMD3(0.4, 0, 0))
-        m.add(SIMD3(0.4, 0, 0.3))
-        XCTAssertEqual(m.currentStep, .top)
-        m.add(SIMD3(0.2, 0.12, 0.15))
-        XCTAssertNil(m.currentStep)
+        XCTAssertEqual(m.currentDimension, .width)
+        XCTAssertFalse(m.isAwaitingSecondPoint)
+        m.add(SIMD3(0, 0, 0)); m.add(SIMD3(0, 0, 0.3))
+        XCTAssertEqual(m.currentDimension, .height)
+        m.add(SIMD3(0, 0, 0)); m.add(SIMD3(0, 0.12, 0))
+        XCTAssertNil(m.currentDimension)
         XCTAssertTrue(m.isComplete)
     }
 
-    func testNoMoreThanFourPoints() {
+    func testNoMoreThanSixPoints() {
         var m = measuredBox()
         m.add(SIMD3(1, 1, 1))
-        XCTAssertEqual(m.points.count, 4)
+        XCTAssertEqual(m.points.count, 6)
     }
 
     func testRawDimensions() throws {
@@ -37,6 +40,27 @@ final class BoxMeasurementTests: XCTestCase {
         XCTAssertEqual(try XCTUnwrap(m.widthCm), 30, accuracy: 0.01)
         XCTAssertEqual(try XCTUnwrap(m.heightCm), 12, accuracy: 0.01)
         XCTAssertTrue(m.isPlausible)
+    }
+
+    func testSegmentsAreIndependent() throws {
+        // Breite an ganz anderer Stelle gemessen als die Länge
+        var m = BoxMeasurement()
+        m.add(SIMD3(0, 0, 0)); m.add(SIMD3(0.40, 0, 0))
+        m.add(SIMD3(2, 0, 2)); m.add(SIMD3(2, 0, 2.25))
+        XCTAssertEqual(try XCTUnwrap(m.widthCm), 25, accuracy: 0.01)
+    }
+
+    func testLengthAlongTopEdgeCountsSpatialDistance() throws {
+        var m = BoxMeasurement()
+        m.add(SIMD3(0, 0.12, 0)); m.add(SIMD3(0.30, 0.12, 0.40))   // Diagonal im Raum: 50 cm
+        XCTAssertEqual(try XCTUnwrap(m.lengthCm), 50, accuracy: 0.01)
+    }
+
+    func testHeightUsesOnlyVerticalDifference() throws {
+        var m = measuredBox()
+        m.undo()
+        m.add(SIMD3(0.45, 0.12, 0.35))   // oben etwas versetzt getroffen
+        XCTAssertEqual(try XCTUnwrap(m.heightCm), 12, accuracy: 0.01)
     }
 
     func testRoundedDimensionsIncludeSafetyMargin() throws {
@@ -48,22 +72,12 @@ final class BoxMeasurementTests: XCTestCase {
 
     func testLengthIsAlwaysTheLongerSide() throws {
         var m = BoxMeasurement()
-        m.add(SIMD3(0, 0, 0))
-        m.add(SIMD3(0.20, 0, 0))     // kurze Seite zuerst gemessen
-        m.add(SIMD3(0.20, 0, 0.35))
-        m.add(SIMD3(0.10, 0.10, 0.10))
+        m.add(SIMD3(0, 0, 0)); m.add(SIMD3(0.20, 0, 0))    // kurze Seite zuerst
+        m.add(SIMD3(0, 0, 0)); m.add(SIMD3(0, 0, 0.35))
+        m.add(SIMD3(0, 0, 0)); m.add(SIMD3(0, 0.10, 0))
         let rounded = try XCTUnwrap(m.roundedDimensionsCm())
         XCTAssertEqual(rounded.length, 36)
         XCTAssertEqual(rounded.width, 21)
-    }
-
-    func testHeightIgnoresSlightlyUnevenFloor() throws {
-        var m = BoxMeasurement()
-        m.add(SIMD3(0, 0.002, 0))
-        m.add(SIMD3(0.40, -0.002, 0))
-        m.add(SIMD3(0.40, 0, 0.30))
-        m.add(SIMD3(0.20, 0.15, 0.15))
-        XCTAssertEqual(try XCTUnwrap(m.heightCm), 15, accuracy: 0.01)
     }
 
     func testRoundUpAvoidsFloatNoise() {
@@ -72,31 +86,32 @@ final class BoxMeasurementTests: XCTestCase {
         XCTAssertEqual(BoxMeasurement.roundUp(32.3, marginCm: 0), 33)
     }
 
-    func testPreviewPerStep() throws {
+    func testPreviewOnlyWhileAwaitingSecondPoint() throws {
         var m = BoxMeasurement()
         XCTAssertNil(m.previewCm(to: SIMD3(0.1, 0, 0)))
         m.add(SIMD3(0, 0, 0))
         XCTAssertEqual(try XCTUnwrap(m.previewCm(to: SIMD3(0.25, 0, 0))), 25, accuracy: 0.01)
         m.add(SIMD3(0.4, 0, 0))
-        m.add(SIMD3(0.4, 0, 0.3))
-        XCTAssertEqual(try XCTUnwrap(m.previewCm(to: SIMD3(0.2, 0.08, 0.1))), 8, accuracy: 0.01)
+        XCTAssertNil(m.previewCm(to: SIMD3(0.1, 0, 0)))
+        m.add(SIMD3(0, 0, 0)); m.add(SIMD3(0, 0, 0.3))
+        m.add(SIMD3(0, 0, 0))
+        XCTAssertEqual(try XCTUnwrap(m.previewCm(to: SIMD3(0.05, 0.08, 0))), 8, accuracy: 0.01)
     }
 
     func testUndoAndReset() {
         var m = measuredBox()
         m.undo()
-        XCTAssertEqual(m.currentStep, .top)
+        XCTAssertEqual(m.currentDimension, .height)
+        XCTAssertTrue(m.isAwaitingSecondPoint)
         XCTAssertNil(m.heightCm)
         m.reset()
-        XCTAssertEqual(m.currentStep, .firstCorner)
+        XCTAssertEqual(m.currentDimension, .length)
     }
 
     func testImplausibleWhenCornerMissed() {
-        var m = BoxMeasurement()
-        m.add(SIMD3(0, 0, 0))
-        m.add(SIMD3(0.40, 0, 0))
-        m.add(SIMD3(0.40, 0, 0.001))   // Ecke praktisch nicht verschoben → 0,1 cm
-        m.add(SIMD3(0.20, 0.12, 0.15))
+        var m = measuredBox()
+        m.undo()
+        m.add(SIMD3(0.40, 0.001, 0.30))   // Höhe 0,1 cm
         XCTAssertFalse(m.isPlausible)
     }
 }

@@ -143,14 +143,15 @@ struct ARMeasureView: UIViewRepresentable {
 
             for (index, point) in points.enumerated() {
                 pointsNode.addChildNode(Self.sphere(at: point))
-                if index == 1 || index == 2 {
-                    pointsNode.addChildNode(Self.line(from: points[index - 1], to: point, color: .white))
+                // Jede Strecke besteht aus einem Punktpaar (0–1 Länge, 2–3 Breite, 4–5 Höhe).
+                guard index % 2 == 1 else { continue }
+                let start = points[index - 1]
+                if index == 5 {
+                    // Höhe: senkrechte Linie vom unteren Punkt auf Höhe des oberen.
+                    pointsNode.addChildNode(Self.line(from: start, to: SIMD3(start.x, point.y, start.z), color: .white))
+                } else {
+                    pointsNode.addChildNode(Self.line(from: start, to: point, color: .white))
                 }
-            }
-            // Höhe: senkrechte Linie vom Boden zum Deckel-Punkt.
-            if points.count == 4, let floor = model.measurement.floorLevel {
-                let top = points[3]
-                pointsNode.addChildNode(Self.line(from: SIMD3(top.x, floor, top.z), to: top, color: .white))
             }
         }
 
@@ -161,21 +162,22 @@ struct ARMeasureView: UIViewRepresentable {
                 previewLine.isHidden = true
                 return
             }
-            Self.place(previewLine, from: start, to: hit)
+            Self.place(previewLine, from: start, to: Self.previewEnd(for: measurement, hit: hit))
             previewLine.isHidden = false
         }
 
         // MARK: Geometrie-Helfer
 
+        /// Vorschau-Linie nur, solange der erste Punkt einer Strecke gesetzt ist.
         private static func previewStart(for measurement: BoxMeasurement, hit: SIMD3<Float>) -> SIMD3<Float>? {
-            switch measurement.currentStep {
-            case .secondCorner, .thirdCorner:
-                return measurement.points.last
-            case .top:
-                return measurement.floorLevel.map { SIMD3(hit.x, $0, hit.z) }
-            case .firstCorner, nil:
-                return nil
-            }
+            guard measurement.isAwaitingSecondPoint, let start = measurement.points.last else { return nil }
+            return start
+        }
+
+        /// Bei der Höhe verläuft die Vorschau senkrecht über dem Startpunkt.
+        private static func previewEnd(for measurement: BoxMeasurement, hit: SIMD3<Float>) -> SIMD3<Float> {
+            guard measurement.currentDimension == .height, let start = measurement.points.last else { return hit }
+            return SIMD3(start.x, hit.y, start.z)
         }
 
         private static func hasMeaningfulChange(from old: SIMD3<Float>?, to new: SIMD3<Float>?) -> Bool {

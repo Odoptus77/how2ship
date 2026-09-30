@@ -2,9 +2,10 @@ import SwiftUI
 import ARKit
 import PaketlotseCore
 
-/// Kamera-Vermessung: 3 Bodenecken + Deckel → Länge, Breite, Höhe (inkl. 1 cm Sicherheitsaufschlag).
+/// Kamera-Vermessung in drei getrennten Schritten: Länge, Breite, Höhe – jeweils zwei Punkte.
+/// Vor jedem Schritt erscheint eine 3D-Anleitung (abschaltbar, jederzeit über „?“ erreichbar).
 struct MeasureScreen: View {
-    /// Übergibt Länge, Breite, Höhe in cm (bereits aufgerundet).
+    /// Übergibt Länge, Breite, Höhe in cm (bereits inkl. Sicherheitsaufschlag aufgerundet).
     let onApply: (Double, Double, Double) -> Void
 
     var body: some View {
@@ -22,8 +23,10 @@ private struct MeasureARContent: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
     @State private var session = MeasureSession()
-    @State private var showHelp = false
-    @AppStorage("hasSeenMeasureHelp") private var hasSeenHelp = false
+    @State private var tutorialDimension: BoxMeasurement.Dimension?
+    /// Anleitungen, die in dieser Messung schon automatisch gezeigt wurden (nicht erneut bei „Rückgängig“).
+    @State private var shownTutorials: Set<BoxMeasurement.Dimension> = []
+    @AppStorage(MeasureTutorialSheet.disabledKey) private var tutorialDisabled = false
 
     private var measurement: BoxMeasurement { session.measurement }
 
@@ -38,10 +41,11 @@ private struct MeasureARContent: View {
 
             VStack(spacing: 12) {
                 topBar
+                DimensionProgress(measurement: measurement)
                 if let error = session.errorMessage {
                     errorCard(error)
-                } else if let step = measurement.currentStep {
-                    instructionCard(step)
+                } else if let dimension = measurement.currentDimension {
+                    instructionCard(dimension)
                 }
                 Spacer()
                 if let preview = session.previewCm, !measurement.isComplete {
@@ -56,14 +60,35 @@ private struct MeasureARContent: View {
             .padding(Theme.padding)
         }
         .statusBarHidden()
-        .sheet(isPresented: $showHelp) { MeasureHelpView() }
-        .task {
-            // Anleitung beim ersten Mal automatisch zeigen (nach dem Einblenden der Kamera).
-            guard !hasSeenHelp else { return }
-            try? await Task.sleep(for: .milliseconds(500))
-            showHelp = true
-            hasSeenHelp = true
+        .sheet(item: $tutorialDimension) { dimension in
+            MeasureTutorialSheet(dimension: dimension) { tutorialDimension = nil }
         }
+        .task {
+            // Kurz warten, bis die Kamera eingeblendet ist, dann die erste Anleitung zeigen.
+            try? await Task.sleep(for: .milliseconds(500))
+            showTutorialIfNeeded()
+        }
+        .onChange(of: measurement.currentDimension) {
+            showTutorialIfNeeded()
+        }
+    }
+
+    /// Vor jedem Schritt (Länge, Breite, Höhe) einmal – außer „Nicht erneut anzeigen“ ist aktiv.
+    private func showTutorialIfNeeded() {
+        guard !tutorialDisabled,
+              tutorialDimension == nil,
+              let dimension = measurement.currentDimension,
+              !measurement.isAwaitingSecondPoint,
+              !shownTutorials.contains(dimension)
+        else { return }
+        shownTutorials.insert(dimension)
+        tutorialDimension = dimension
+    }
+
+    private func restart() {
+        session.reset()
+        shownTutorials = []
+        showTutorialIfNeeded()
     }
 
     // MARK: Oben
@@ -80,27 +105,34 @@ private struct MeasureARContent: View {
 
             Spacer()
 
-            StepIndicator(completed: measurement.points.count, total: BoxMeasurement.Step.allCases.count)
+            Text("Paket vermessen")
+                .font(.lotse(16, .bold))
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .background(.ultraThinMaterial, in: Capsule())
 
             Spacer()
 
-            Button { showHelp = true } label: {
+            // Anleitung jederzeit öffnen – auch wenn sie abgeschaltet oder weggeklickt wurde.
+            Button {
+                tutorialDimension = measurement.currentDimension ?? .length
+            } label: {
                 Image(systemName: "questionmark")
                     .font(.system(size: 16, weight: .bold))
                     .frame(width: 44, height: 44)
                     .background(.ultraThinMaterial, in: Circle())
             }
-            .accessibilityLabel("Anleitung")
+            .accessibilityLabel("Anleitung anzeigen")
         }
         .foregroundStyle(.white)
     }
 
-    private func instructionCard(_ step: BoxMeasurement.Step) -> some View {
+    private func instructionCard(_ dimension: BoxMeasurement.Dimension) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Schritt \(step.number) von 4 · \(step.title)")
+            Text("Schritt \(dimension.number) von 3 · \(dimension.title) · Punkt \(measurement.isAwaitingSecondPoint ? 2 : 1) von 2")
                 .font(.lotse(12, .bold))
                 .foregroundStyle(Theme.accent)
-            Text(step.instruction)
+            Text(dimension.instruction(forSecondPoint: measurement.isAwaitingSecondPoint))
                 .font(.lotse(15, .semibold))
                 .foregroundStyle(.white)
                 .fixedSize(horizontal: false, vertical: true)
@@ -169,7 +201,6 @@ private struct MeasureARContent: View {
 
             Spacer()
 
-            // Platzhalter für Symmetrie
             Color.clear.frame(width: 56, height: 56)
         }
         .foregroundStyle(.white)
@@ -199,7 +230,7 @@ private struct MeasureARContent: View {
                 }
 
                 HStack(spacing: 10) {
-                    Button("Neu messen") { session.reset() }
+                    Button("Neu messen") { restart() }
                         .font(.lotse(15, .bold))
                         .foregroundStyle(Theme.primary)
                         .frame(maxWidth: .infinity)
@@ -220,6 +251,34 @@ private struct MeasureARContent: View {
 
 // MARK: - Bausteine
 
+/// Fortschritt der drei Strecken: erledigt (mit Wert), aktuell, offen.
+private struct DimensionProgress: View {
+    let measurement: BoxMeasurement
+
+    var body: some View {
+        HStack(spacing: 8) {
+            ForEach(BoxMeasurement.Dimension.allCases) { dimension in
+                let value = measurement.valueCm(for: dimension)
+                let isCurrent = measurement.currentDimension == dimension
+                HStack(spacing: 5) {
+                    Image(systemName: value != nil ? "checkmark.circle.fill" : (isCurrent ? "circle.dotted" : "circle"))
+                    Text(value.map { "\(Int(BoxMeasurement.roundUp($0, marginCm: BoxMeasurement.defaultSafetyMarginCm))) cm" } ?? dimension.title)
+                        .contentTransition(.numericText())
+                }
+                .font(.lotse(13, .bold))
+                .foregroundStyle(value != nil || isCurrent ? .white : .white.opacity(0.6))
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(
+                    value != nil ? AnyShapeStyle(Theme.primary) : (isCurrent ? AnyShapeStyle(Theme.accent) : AnyShapeStyle(.ultraThinMaterial)),
+                    in: Capsule()
+                )
+            }
+        }
+        .animation(.easeInOut(duration: 0.2), value: measurement.points.count)
+    }
+}
+
 private struct Reticle: View {
     let isActive: Bool
 
@@ -235,25 +294,6 @@ private struct Reticle: View {
         .shadow(color: .black.opacity(0.4), radius: 4)
         .animation(.easeInOut(duration: 0.2), value: isActive)
         .allowsHitTesting(false)
-    }
-}
-
-private struct StepIndicator: View {
-    let completed: Int
-    let total: Int
-
-    var body: some View {
-        HStack(spacing: 6) {
-            ForEach(0..<total, id: \.self) { index in
-                Capsule()
-                    .fill(index < completed ? Theme.accent : Color.white.opacity(0.4))
-                    .frame(width: index == completed ? 22 : 10, height: 8)
-            }
-        }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 12)
-        .background(.ultraThinMaterial, in: Capsule())
-        .animation(.easeInOut(duration: 0.2), value: completed)
     }
 }
 
@@ -273,44 +313,6 @@ private struct ResultValue: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 12)
         .background(Theme.chip, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-    }
-}
-
-private struct MeasureHelpView: View {
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("So misst du richtig")
-                .font(.lotse(22, .bold))
-            VStack(alignment: .leading, spacing: 10) {
-                helpRow("1", "Stell den Karton auf den Boden oder einen Tisch mit etwas Platz drumherum.")
-                helpRow("2", "Bewege das iPhone kurz langsam hin und her, bis der Kreis aufleuchtet.")
-                helpRow("3", "Setze drei untere Ecken nacheinander – erst die lange, dann die kurze Seite.")
-                helpRow("4", "Ziele zum Schluss auf den Deckel für die Höhe.")
-            }
-            Text("Die Kamerabilder werden nur auf deinem Gerät verarbeitet und nicht hochgeladen.")
-                .font(.lotse(12))
-                .foregroundStyle(Theme.textSecondary)
-            Button("Los geht's") { dismiss() }
-                .buttonStyle(PrimaryButtonStyle())
-        }
-        .padding(24)
-        .presentationDetents([.medium, .large])
-    }
-
-    private func helpRow(_ number: String, _ text: String) -> some View {
-        HStack(alignment: .top, spacing: 12) {
-            Text(number)
-                .font(.lotse(14, .heavy))
-                .foregroundStyle(.white)
-                .frame(width: 28, height: 28)
-                .background(Theme.primary, in: Circle())
-            Text(text)
-                .font(.lotse(15))
-                .foregroundStyle(Theme.textPrimary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
     }
 }
 

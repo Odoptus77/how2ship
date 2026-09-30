@@ -77,7 +77,7 @@ Orientiert an der Referenz „Job Finder UI Kit“:
 | Eintippen, Einfügen (PasteButton), Barcode-Scan (VisionKit) | ✅ |
 | Erinnerungen nach 2 h und am nächsten Morgen um 9 Uhr, „Nicht gebucht“ | ✅ |
 | Sendungsliste und Detailansicht, Link zum Paketdienst | ✅ |
-| **Kamera-Vermessung** (ARKit, Scene Depth auf LiDAR-Geräten): 3 Bodenecken + Deckel, Live-Wert, Sicherheitsaufschlag, Plausibilitätsprüfung | ✅ nur auf echtem iPhone |
+| **Kamera-Vermessung** (ARKit, Scene Depth auf LiDAR-Geräten): Länge, Breite und Höhe als getrennte Strecken, 3D-Anleitung vor jedem Schritt, Live-Wert, Sicherheitsaufschlag, Plausibilitätsprüfung | ✅ nur auf echtem iPhone |
 | Automatischer Tracking-Status und Push (Backend) | ⏳ |
 | **Paketshop-Karte** mit echten Standorten: DHL Location Finder (optional, API-Key) + OpenStreetMap für Hermes/DPD/GLS/UPS; Filter nach Paketdienst, Automaten, „Jetzt geöffnet“; Route | ✅ |
 | **Premium** (StoreKit 2, Einmalkauf 2,99 €): Paywall, Kaufen/Wiederherstellen, gespeicherte Paketgrößen, Versandverlauf & Kostenübersicht, unbegrenzter Sendungsverlauf | ✅ |
@@ -95,7 +95,7 @@ Orientiert an der Referenz „Job Finder UI Kit“:
 ## Kamera-Vermessung testen
 - Funktioniert **nur auf einem echten iPhone**, nicht im Simulator. Dort erscheint ein Hinweis.
 - iPhone per Kabel anschließen, in Xcode unter *Signing & Capabilities* dein Team auswählen, Gerät als Ziel wählen, dann ⌘R.
-- Ablauf: Karton auf den Boden stellen, iPhone kurz bewegen, drei untere Ecken mit + setzen, dann auf den Deckel zielen. Mit „Übernehmen“ landen die Werte in den Eingabefeldern.
+- **Ablauf in 3 Schritten:** erst **Länge**, dann **Breite**, dann **Höhe**, jede Strecke einzeln mit 2 Punkten. Bei der Höhe zählt nur der senkrechte Abstand. Vor jedem Schritt zeigt eine **3D-Animation** (SceneKit), welche Kante wie gemessen wird. Die Checkbox „Nicht erneut anzeigen“ schaltet sie ab, das **?** oben öffnet sie jederzeit wieder. Mit „Übernehmen“ landen die Werte in den Eingabefeldern.
 - Die Werte enthalten 1 cm Sicherheitsaufschlag und sind auf ganze cm aufgerundet.
 
 ## Premium (StoreKit 2) testen

@@ -1,0 +1,34 @@
+{
+  "identifier" : "8F1C2B3A",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : true,
+      "internalID" : "6740000001",
+      "localizations" : [
+        {
+          "description" : "Werbefrei, gespeicherte Paketgrößen, Versandverlauf mit Kostenübersicht – einmalig.",
+          "displayName" : "Paketlotse Premium",
+          "locale" : "de"
+        }
+      ],
+      "productID" : "de.paketlotse.app.premium",
+      "referenceName" : "Paketlotse Premium",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_locale" : "de_DE",
+    "_storefront" : "DEU"
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}

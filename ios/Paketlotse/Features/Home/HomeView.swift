@@ -21,6 +21,8 @@ struct QuickPreset: Identifiable, Hashable {
 }
 
 struct HomeView: View {
+    @Environment(AppStore.self) private var store
+    @Environment(PurchaseManager.self) private var purchases
     @State private var length = ""
     @State private var width = ""
     @State private var height = ""
@@ -34,6 +36,9 @@ struct HomeView: View {
     @State private var packstation = false
     @State private var showResults = false
     @State private var showMeasure = false
+    @State private var showSaveAlert = false
+    @State private var saveName = ""
+    @State private var paywallReason: PaywallReason?
 
     private var parcel: ParcelDimensions? {
         guard let l = Self.number(length), let w = Self.number(width),
@@ -75,6 +80,16 @@ struct HomeView: View {
                     SectionHeader(title: "Schnellauswahl")
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 10) {
+                            ForEach(store.savedParcels) { saved in
+                                Chip(title: "★ " + saved.name, isSelected: selectedPreset == saved.id.uuidString) {
+                                    apply(saved)
+                                }
+                                .contextMenu {
+                                    Button("Löschen", systemImage: "trash", role: .destructive) {
+                                        store.deleteSavedParcel(saved)
+                                    }
+                                }
+                            }
                             ForEach(QuickPreset.all) { preset in
                                 Chip(title: preset.title, isSelected: selectedPreset == preset.id) { apply(preset) }
                             }
@@ -86,7 +101,11 @@ struct HomeView: View {
                     SectionHeader(title: "Zusatzleistungen")
                     servicesSection
 
-                    SectionHeader(title: "Maße & Gewicht")
+                    SectionHeader(
+                        title: "Maße & Gewicht",
+                        actionTitle: parcel == nil ? nil : "Größe speichern",
+                        action: parcel == nil ? nil : saveTapped
+                    )
                     measureCard
 
                     Button("Preise vergleichen") { showResults = true }
@@ -100,6 +119,16 @@ struct HomeView: View {
             .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(isPresented: $showResults) {
                 if let parcel { ResultsView(parcel: parcel, requirements: requirements) }
+            }
+            .sheet(item: $paywallReason) { reason in PaywallView(reason: reason.text) }
+            .alert("Größe speichern", isPresented: $showSaveAlert) {
+                TextField("Name, z. B. „Standardkarton“", text: $saveName)
+                Button("Speichern") {
+                    if let parcel { store.saveParcel(named: saveName, parcel) }
+                }
+                Button("Abbrechen", role: .cancel) {}
+            } message: {
+                Text("Erscheint danach in der Schnellauswahl.")
             }
             .fullScreenCover(isPresented: $showMeasure) {
                 MeasureScreen { measuredLength, measuredWidth, measuredHeight in
@@ -134,10 +163,30 @@ struct HomeView: View {
         }
         .card()
         .onChange(of: [length, width, height, weight]) {
-            if let preset = QuickPreset.all.first(where: { $0.id == selectedPreset }), parcel != preset.parcel {
+            let selectedParcel = QuickPreset.all.first { $0.id == selectedPreset }?.parcel
+                ?? store.savedParcels.first { $0.id.uuidString == selectedPreset }?.parcel
+            if let selectedParcel, parcel != selectedParcel {
                 selectedPreset = nil
             }
         }
+    }
+
+    /// Gespeicherte Paketgrößen sind Premium.
+    private func saveTapped() {
+        guard purchases.isPremium else {
+            paywallReason = PaywallReason(text: "Gespeicherte Paketgrößen sind Teil von Premium.")
+            return
+        }
+        saveName = ""
+        showSaveAlert = true
+    }
+
+    private func apply(_ saved: SavedParcel) {
+        length = Self.format(saved.parcel.lengthCm)
+        width = Self.format(saved.parcel.widthCm)
+        height = Self.format(saved.parcel.heightCm)
+        weight = Self.format(saved.parcel.weightKg)
+        selectedPreset = saved.id.uuidString
     }
 
     private func apply(_ preset: QuickPreset) {

@@ -9,6 +9,7 @@ struct PaketlotseApp: App {
         WindowGroup {
             RootView()
                 .environment(appDelegate.store)
+                .environment(appDelegate.purchases)
         }
     }
 }
@@ -17,6 +18,7 @@ struct PaketlotseApp: App {
 @MainActor
 final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     let store = AppStore()
+    let purchases = PurchaseManager()
 
     func application(
         _ application: UIApplication,

@@ -52,7 +52,8 @@ ios/
         ├── Results/                 Ergebnisliste, Spar-Tipp, „Jetzt buchen“, „So vergleichen wir“
         ├── Shipments/               Sendungen, Abfrage der Sendungsnummer, Barcode-Scanner
         ├── Map/                     Karte mit Abgabestellen, Filtern, Detailkarte, Route
-        └── Profile/                 Premium (Platzhalter), Tarifstand, Rechtliches
+        ├── Premium/                 Paywall, Versandverlauf & Kostenübersicht
+        └── Profile/                 Premium-Status, gespeicherte Größen, Tarifstand, Rechtliches
 ```
 
 ## Design
@@ -77,7 +78,8 @@ Orientiert an der Referenz „Job Finder UI Kit“:
 | **Kamera-Vermessung** (ARKit, Scene Depth auf LiDAR-Geräten): 3 Bodenecken + Deckel, Live-Wert, Sicherheitsaufschlag, Plausibilitätsprüfung | ✅ nur auf echtem iPhone |
 | Automatischer Tracking-Status und Push (Backend) | ⏳ |
 | **Paketshop-Karte** mit echten Standorten: DHL Location Finder (optional, API-Key) + OpenStreetMap für Hermes/DPD/GLS/UPS; Filter nach Paketdienst, Automaten, „Jetzt geöffnet“; Route | ✅ |
-| Premium (StoreKit 2), Werbung, Affiliate-Links | ⏳ |
+| **Premium** (StoreKit 2, Einmalkauf 2,99 €): Paywall, Kaufen/Wiederherstellen, gespeicherte Paketgrößen, Versandverlauf & Kostenübersicht, unbegrenzter Sendungsverlauf | ✅ |
+| Werbung, Affiliate-Links | ⏳ |
 
 ## Paketshop-Karte
 - **Ohne Einrichtung** lädt die Karte Standorte aus **OpenStreetMap**, über die Overpass API und ohne Key. Das deckt DHL-Packstationen, Postfilialen sowie Hermes-, DPD-, GLS- und UPS-Shops ab, soweit sie in OSM erfasst sind.
@@ -93,6 +95,16 @@ Orientiert an der Referenz „Job Finder UI Kit“:
 - iPhone per Kabel anschließen, in Xcode unter *Signing & Capabilities* dein Team auswählen, Gerät als Ziel wählen, dann ⌘R.
 - Ablauf: Karton auf den Boden stellen, iPhone kurz bewegen, drei untere Ecken mit + setzen, dann auf den Deckel zielen. Mit „Übernehmen“ landen die Werte in den Eingabefeldern.
 - Die Werte enthalten 1 cm Sicherheitsaufschlag und sind auf ganze cm aufgerundet.
+
+## Premium (StoreKit 2) testen
+- **Lokal ohne App Store Connect:** Das Schema nutzt `StoreKit/Paketlotse.storekit`. Einfach im Simulator oder auf dem Gerät starten, Profil → „Jetzt freischalten“. Der Kauf wird simuliert.
+- Käufe zurücksetzen: in Xcode *Debug → StoreKit → Manage Transactions…* und die Transaktion löschen.
+- „Kaufen anfragen“, Fehler oder Erstattungen lassen sich dort ebenfalls simulieren.
+- **Für TestFlight und App Store:**
+  1. In App Store Connect unter *Verträge* das Paid-Apps-Agreement abschließen, inklusive Bank- und Steuerdaten.
+  2. Einen In-App-Kauf vom Typ **Nicht-verbrauchbar** mit der Produkt-ID `de.paketlotse.app.premium` und 2,99 € anlegen, mit Anzeigename, Beschreibung und Screenshot für die Prüfung.
+  3. Die Produkt-ID muss mit `PurchaseManager.premiumProductID` übereinstimmen.
+- **Was Premium freischaltet:** gespeicherte Paketgrößen (Startbildschirm → „Größe speichern“), den Versandverlauf mit Kosten pro Jahr (Profil) und einen unbegrenzten Sendungsverlauf. Werbefrei ist über `purchases.showsAds` vorbereitet, eine Werbe-SDK gibt es noch nicht.
 
 ## App-Icon
 Variante B (Kartenpin mit Paket) ist im Asset-Katalog eingebaut, inklusive Dark- und Tinted-Variante (iOS 18+). Alle Einzelgrößen, die SVG-Quellen und ein ZIP liegen in `design/appicon/` (siehe `GROESSEN.md`).

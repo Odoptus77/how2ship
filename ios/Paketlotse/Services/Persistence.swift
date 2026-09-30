@@ -1,9 +1,31 @@
 import Foundation
 import PaketlotseCore
 
+/// Eine vom Nutzer gespeicherte Paketgröße (Premium), z. B. „Mein Standardkarton“.
+struct SavedParcel: Codable, Identifiable, Hashable {
+    var id = UUID()
+    var name: String
+    var parcel: ParcelDimensions
+}
+
 struct AppData: Codable {
     var bookings: [PendingBooking] = []
     var shipments: [Shipment] = []
+    var savedParcels: [SavedParcel] = []
+
+    init(bookings: [PendingBooking] = [], shipments: [Shipment] = [], savedParcels: [SavedParcel] = []) {
+        self.bookings = bookings
+        self.shipments = shipments
+        self.savedParcels = savedParcels
+    }
+
+    /// Tolerant gegenüber älteren Speicherständen ohne neue Felder.
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        bookings = try container.decodeIfPresent([PendingBooking].self, forKey: .bookings) ?? []
+        shipments = try container.decodeIfPresent([Shipment].self, forKey: .shipments) ?? []
+        savedParcels = try container.decodeIfPresent([SavedParcel].self, forKey: .savedParcels) ?? []
+    }
 }
 
 /// Speichert Buchungen und Sendungen lokal als JSON (Application Support).

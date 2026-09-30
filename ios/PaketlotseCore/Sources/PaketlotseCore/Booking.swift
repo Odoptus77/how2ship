@@ -13,19 +13,22 @@ public struct PendingBooking: Codable, Identifiable, Hashable, Sendable {
     public var tariffID: String
     public var carrier: Carrier
     public var product: String
+    /// Gesamtpreis zum Zeitpunkt der Buchung (für Versandverlauf und Kostenübersicht).
+    public var priceCents: Int?
     public var clickedAt: Date
     public var status: BookingStatus
     /// Die Abfrage erscheint nur einmal automatisch; danach übernehmen Erinnerungen.
     public var promptShownAt: Date?
 
     public init(
-        id: UUID = UUID(), tariffID: String, carrier: Carrier, product: String,
+        id: UUID = UUID(), tariffID: String, carrier: Carrier, product: String, priceCents: Int? = nil,
         clickedAt: Date = Date(), status: BookingStatus = .open, promptShownAt: Date? = nil
     ) {
         self.id = id
         self.tariffID = tariffID
         self.carrier = carrier
         self.product = product
+        self.priceCents = priceCents
         self.clickedAt = clickedAt
         self.status = status
         self.promptShownAt = promptShownAt

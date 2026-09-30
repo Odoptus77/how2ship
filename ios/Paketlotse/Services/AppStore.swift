@@ -9,6 +9,7 @@ final class AppStore {
     private(set) var catalogError: String?
     private(set) var bookings: [PendingBooking] = []
     private(set) var shipments: [Shipment] = []
+    private(set) var savedParcels: [SavedParcel] = []
 
     /// Offene Buchung, für die gerade die Abfrage der Sendungsnummer angezeigt wird.
     var promptBooking: PendingBooking?
@@ -28,6 +29,7 @@ final class AppStore {
         let stored = persistence.load()
         bookings = stored.bookings
         shipments = stored.shipments
+        savedParcels = stored.savedParcels
     }
 
     // MARK: - Vergleich
@@ -53,7 +55,12 @@ final class AppStore {
 
     /// „Jetzt buchen“ getippt: Buchung merken. Die Buchung selbst läuft extern (Carrier-App / Standardbrowser).
     func startBooking(for offer: Offer) {
-        let booking = PendingBooking(tariffID: offer.tariff.id, carrier: offer.tariff.carrier, product: offer.tariff.product)
+        let booking = PendingBooking(
+            tariffID: offer.tariff.id,
+            carrier: offer.tariff.carrier,
+            product: offer.tariff.product,
+            priceCents: offer.priceCents
+        )
         bookings.append(booking)
         save()
         let policy = self.policy
@@ -127,6 +134,43 @@ final class AppStore {
         save()
     }
 
+    // MARK: - Premium: gespeicherte Größen, Versandverlauf
+
+    func saveParcel(named name: String, _ parcel: ParcelDimensions) {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        savedParcels.append(SavedParcel(name: trimmed.isEmpty ? "Meine Größe" : trimmed, parcel: parcel))
+        save()
+    }
+
+    func deleteSavedParcel(_ saved: SavedParcel) {
+        savedParcels.removeAll { $0.id == saved.id }
+        save()
+    }
+
+    /// Gebuchte Sendungen mit erfasster Sendungsnummer, neueste zuerst.
+    var shippingHistory: [PendingBooking] {
+        bookings.filter { $0.status == .numberCaptured }.sorted { $0.clickedAt > $1.clickedAt }
+    }
+
+    /// Kostenübersicht je Jahr: (Jahr, Anzahl Pakete, Summe in Cent).
+    func yearlyCosts(calendar: Calendar = .current) -> [(year: Int, count: Int, totalCents: Int)] {
+        let grouped = Dictionary(grouping: shippingHistory) { calendar.component(.year, from: $0.clickedAt) }
+        return grouped
+            .map { year, items in (year: year, count: items.count, totalCents: items.compactMap(\.priceCents).reduce(0, +)) }
+            .sorted { $0.year > $1.year }
+    }
+
+    /// Kostenlose Version: zugestellte Sendungen 30 Tage nach Zustellung entfernen. Premium behält alles.
+    func purgeExpiredShipments(keepHistory: Bool, now: Date = .now) {
+        guard !keepHistory else { return }
+        let before = shipments.count
+        shipments.removeAll { shipment in
+            guard let deletion = shipment.deletionDate() else { return false }
+            return deletion < now
+        }
+        if shipments.count != before { save() }
+    }
+
     // MARK: - Intern
 
     private func expireOldBookings(now: Date) {
@@ -145,6 +189,6 @@ final class AppStore {
     }
 
     private func save() {
-        persistence.save(AppData(bookings: bookings, shipments: shipments))
+        persistence.save(AppData(bookings: bookings, shipments: shipments, savedParcels: savedParcels))
     }
 }

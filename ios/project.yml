@@ -42,3 +42,15 @@ targets:
         ENABLE_PREVIEWS: YES
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
 
+
+schemes:
+  Paketlotse:
+    build:
+      targets:
+        Paketlotse: all
+    run:
+      config: Debug
+      # Lokale StoreKit-Testumgebung: Käufe ohne App Store Connect testen.
+      storeKitConfiguration: StoreKit/Paketlotse.storekit
+    archive:
+      config: Release

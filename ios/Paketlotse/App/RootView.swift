@@ -6,6 +6,7 @@ struct RootView: View {
     }
 
     @Environment(AppStore.self) private var store
+    @Environment(PurchaseManager.self) private var purchases
     @Environment(\.scenePhase) private var scenePhase
     @State private var selectedTab: Tab = .ship
 
@@ -32,7 +33,11 @@ struct RootView: View {
         }
         .tint(Theme.primary)
         .onChange(of: scenePhase) { _, phase in
-            if phase == .active { store.sceneDidBecomeActive() }
+            if phase == .active {
+                store.sceneDidBecomeActive()
+                store.purgeExpiredShipments(keepHistory: purchases.isPremium)
+                Task { await purchases.updateEntitlements() }
+            }
         }
         .sheet(item: $store.promptBooking, onDismiss: { store.promptDismissed() }) { booking in
             TrackingPromptSheet(booking: booking)

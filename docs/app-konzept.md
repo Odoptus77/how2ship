@@ -119,8 +119,8 @@ Ein Spar-Tipp erscheint nur, wenn er realistisch ist, zum Beispiel bei höchsten
 Neben jedem Tarif steht ein Button, der den Nutzer zur Buchung bringt:
 - **Mit Provision:** Ist ein Portal mit Partnerprogramm (Packlink, Eurosender) am günstigsten oder gleich teuer, führt der Button per Affiliate-Link dorthin.
 - **Ohne Provision:** Ist die Online-Frankierung beim Paketdienst selbst am günstigsten, führt der Button direkt zum Paketdienst.
-- Die Buchung öffnet sich **im In-App-Browser** (SFSafariViewController bzw. Chrome Custom Tabs). Ist die App des Paketdienstes installiert, öffnet sich stattdessen diese.
-- Die App merkt sich die Buchung als **„offene Buchung“**. Das ist der Auslöser für F7, siehe Abschnitt 4.
+- Die Buchung öffnet sich **außerhalb von Paketlotse**: in der App des Paketdienstes, wenn sie installiert ist, sonst im Standardbrowser. **Paketlotse hat keinen eigenen Browser und liest nichts von der Buchungsseite aus.**
+- Die App merkt sich die Buchung als **„offene Buchung“** (Paketdienst, Produkt, Zeitpunkt). Das löst die **Abfrage der Sendungsnummer** aus, siehe Abschnitt 4.2.
 
 ### 3.7 F8: Karte mit Paketshops und Packstationen
 
@@ -156,8 +156,8 @@ Neben jedem Tarif steht ein Button, der den Nutzer zur Buchung bringt:
 
 | # | Weg | Ablauf |
 |---|---|---|
-| 1 | **Rückkehr-Abfrage** | Kommt der Nutzer aus dem Buchungsbrowser zurück, fragt die App: *„Hast du gebucht? Füge jetzt die Sendungsnummer hinzu und wir halten dich auf dem Laufenden.“* |
-| 2 | **Erinnerung** | Nach 2 Stunden und am nächsten Morgen kommt eine lokale Benachrichtigung zur offenen Buchung: *„Dein Hermes-Paket: Sendungsnummer hinzufügen?“* |
+| 1 | **Abfrage bei Rückkehr** | Kehrt der Nutzer nach der Buchung zu Paketlotse zurück, fragt die App nach der Sendungsnummer (Details in 4.2). |
+| 2 | **Erinnerung** | Wurde die Abfrage übersprungen, kommt eine lokale Benachrichtigung zur offenen Buchung (Details in 4.2). |
 | 3 | **Barcode-Scan** | Die Kamera scannt das Versandlabel oder den Einlieferungsbeleg aus dem Paketshop. Die Nummer wird aus dem Barcode (Code 128, DataMatrix, QR) gelesen, der Paketdienst wird erkannt. |
 | 4 | **Zwischenablage** | Wurde eine Sendungsnummer kopiert, bietet die App an, sie einzufügen. Auf iOS läuft das über die System-Abfrage zum Einfügen. |
 | 5 | **Teilen bzw. Share-Extension** | Aus einer Buchungsbestätigung per E-Mail oder PDF: „Teilen → Paketlotse“. Die App liest die Nummer aus dem Text. |
@@ -166,13 +166,79 @@ Zusätzlich lassen sich **eingehende Sendungen** manuell hinzufügen, also Paket
 
 **Phase 2 (Label-Kauf in der App):** Die Sendungsnummer kommt **automatisch** mit dem Label. Die Verfolgung startet ohne Zutun des Nutzers.
 
-### 4.2 Paketdienst automatisch erkennen
+**Grundsatz:** Paketlotse liest die Sendungsnummer **nie heimlich** von fremden Seiten aus, weder per WebView noch durch Scraping. Der Nutzer gibt sie selbst ein: getippt, eingefügt, gescannt oder geteilt.
+
+### 4.2 Abfrage der Sendungsnummer
+
+**Auslöser:** Es gibt eine *offene Buchung*, weil der Nutzer auf „Jetzt buchen“ getippt hat, und die App kommt wieder in den Vordergrund.
+- **Frühestens nach 60 Sekunden außerhalb der App**, damit kein versehentlicher Klick eine Abfrage auslöst.
+- **Höchstens 48 Stunden** nach dem Klick. Danach verfällt die offene Buchung still.
+
+**Abfrage-Dialog** (Bottom Sheet, nicht bildschirmfüllend):
+
+```
+┌─────────────────────────────────────────────┐
+│  📦 Hermes Paket S – gebucht?               │
+│                                             │
+│  Füge die Sendungsnummer hinzu und wir      │
+│  sagen dir Bescheid, wo dein Paket ist.     │
+│                                             │
+│  ┌───────────────────────────────┐ ┌─────┐  │
+│  │ Sendungsnummer                │ │ 📷  │  │
+│  └───────────────────────────────┘ └─────┘  │
+│  [ Aus Zwischenablage einfügen ]            │  ← nur wenn eine Nummer erkannt wird
+│                                             │
+│  Name (optional): „Geschenk für Oma“        │
+│                                             │
+│  [      Sendung verfolgen      ]            │
+│                                             │
+│  Später erinnern   ·   Nicht gebucht        │
+└─────────────────────────────────────────────┘
+```
+
+**Eingabewege im Dialog:**
+
+| Weg | Verhalten |
+|---|---|
+| **Eintippen** | Freitextfeld. Leerzeichen und Bindestriche werden automatisch entfernt, Großbuchstaben erzwungen. |
+| **Einfügen** | Der Button erscheint nur, wenn die Zwischenablage etwas enthält, das wie eine Sendungsnummer aussieht. Auf iOS läuft das über den System-Button zum Einfügen, damit kein Warnhinweis erscheint. |
+| **Scannen 📷** | Öffnet den Barcode-Scanner für Versandlabel oder Einlieferungsbeleg (Code 128, DataMatrix, QR). Die Erkennung läuft auf dem Gerät. |
+
+**Prüfung und Zuordnung:**
+- Der **Paketdienst ist aus der offenen Buchung vorbelegt**. Die eingegebene Nummer wird gegen dessen Format geprüft, siehe 4.3.
+- Passt das Format nicht, erscheint der Hinweis *„Das sieht nicht nach einer Hermes-Nummer aus. Anderer Paketdienst?“* mit Auswahl des Paketdienstes. Speichern ist trotzdem möglich.
+- Nach dem Speichern startet die Verfolgung sofort. Die App wechselt in die Sendungsdetails und fragt **erst jetzt** nach der Erlaubnis für Push-Benachrichtigungen („Sollen wir dir Bescheid geben, wenn dein Paket unterwegs ist?“).
+
+**Wenn der Nutzer die Abfrage nicht sofort erledigt:**
+
+| Aktion | Folge |
+|---|---|
+| **Später erinnern** (oder Dialog wegwischen) | Lokale Benachrichtigung **nach 2 Stunden**. Wird auch die ignoriert, eine letzte **am nächsten Morgen um 9 Uhr**: *„Dein Hermes-Paket: Sendungsnummer hinzufügen?“* Danach nichts mehr. |
+| **Nicht gebucht** | Die offene Buchung wird verworfen, keine weiteren Erinnerungen |
+| Neue Buchung, während eine offene besteht | Die Abfrage bezieht sich auf die neueste Buchung. Ältere offene Buchungen sind im Tab „Sendungen“ unter „Offene Buchungen“ weiter erreichbar. |
+
+**Weitere Einstiege ohne vorherige Buchung:**
+- Im Tab „Sendungen“ über „+ Sendung hinzufügen“, mit demselben Dialog, aber ohne vorbelegten Paketdienst
+- Über das Teilen-Menü aus E-Mail oder PDF, siehe 4.1, Weg 5
+
+**Zustände einer Buchung:**
+
+```
+offen ──(Nummer erfasst)──▶ nummer_erfasst ──▶ Sendung wird verfolgt
+  │
+  ├──(„Nicht gebucht“)──▶ verworfen
+  └──(48 h ohne Reaktion)──▶ abgelaufen
+```
+
+**Kennzahl:** Anteil der Buchungs-Klicks, bei denen eine Sendungsnummer erfasst wird. Ziel: mindestens 35 %. Gemessen wird getrennt nach Weg (Abfrage, Erinnerung, Scan, Einfügen, Teilen), um den Dialog gezielt zu verbessern.
+
+### 4.3 Paketdienst automatisch erkennen
 
 - Das Format der Nummer wird per Regex geprüft, gegebenenfalls mit Prüfziffer. Beispiele: UPS beginnt mit `1Z…`. DHL nutzt meist 12 bis 20 Ziffern bzw. `JJD…`. Hermes, DPD und GLS haben eigene Längen und Präfixe.
 - Ist das Ergebnis nicht eindeutig, fragt die App kurz nach: „Welcher Paketdienst?“. Aus der offenen Buchung ist der Paketdienst meist schon bekannt.
 - Der Nutzer kann der Sendung einen Namen geben, z. B. „Geschenk für Oma“.
 
-### 4.3 Anzeige und Benachrichtigungen
+### 4.4 Anzeige und Benachrichtigungen
 
 - **Tab „Sendungen“:** Liste mit Status-Chips (Unterwegs, In Zustellung, Zugestellt, Problem)
 - **Detailansicht:** Zeitleiste mit allen Ereignissen, voraussichtliches Zustelldatum, Button „Beim Paketdienst öffnen“ für Umleitung und Ablageort
@@ -180,7 +246,7 @@ Zusätzlich lassen sich **eingehende Sendungen** manuell hinzufügen, also Paket
 - **iOS Live Activity bzw. Android-Widget:** „Dein Paket ist heute in Zustellung“ auf dem Sperrbildschirm
 - **Automatisches Archivieren** 7 Tage nach Zustellung. In der kostenlosen Version wird die Sendung **30 Tage nach Zustellung gelöscht**, in Premium bleibt sie im Verlauf.
 
-### 4.4 Technische Umsetzung
+### 4.5 Technische Umsetzung
 
 | Option | Paketdienste | Kosten | Einsatz |
 |---|---|---|---|
@@ -201,7 +267,7 @@ Zusätzlich lassen sich **eingehende Sendungen** manuell hinzufügen, also Paket
 - **Keine Empfängeradressen** in Phase 1.
 - Die Verbindung zum Konto läuft über eine anonyme Geräte-ID. Ein Login ist optional (nötig für die Synchronisierung über mehrere Geräte bzw. für Premium).
 - Die Tracking-Anbieter sind Auftragsverarbeiter nach Art. 28 DSGVO, mit Auftragsverarbeitungsvertrag (AVV). Anbieter mit Hosting in der EU werden bevorzugt.
-- Die Daten werden nach Ablauf automatisch gelöscht (siehe 4.3).
+- Die Daten werden nach Ablauf automatisch gelöscht (siehe 4.4).
 
 ---
 
@@ -210,8 +276,8 @@ Zusätzlich lassen sich **eingehende Sendungen** manuell hinzufügen, also Paket
 ```
 ┌─────────────┐   ┌──────────────────┐   ┌─────────────────┐   ┌──────────────────┐
 │ 1. Paket    │──▶│ 2. Ergebnisliste │──▶│ 3. Jetzt buchen │──▶│ 4. Zurück in App │
-│  erfassen   │   │  + Spar-Tipp     │   │  (In-App-Browser│   │  „Sendungsnummer │
-│ Kamera/Hand │   │  + Karte         │   │   / Carrier-App)│   │   hinzufügen?“   │
+│  erfassen   │   │  + Spar-Tipp     │   │  (Carrier-App / │   │  Abfrage: „Sen-  │
+│ Kamera/Hand │   │  + Karte         │   │ Standardbrowser)│   │  dungsnummer?“   │
 └─────────────┘   └──────────────────┘   └─────────────────┘   └────────┬─────────┘
                                                                         ▼
                   ┌──────────────────┐   ┌─────────────────┐   ┌──────────────────┐
@@ -239,7 +305,7 @@ Zusätzlich lassen sich **eingehende Sendungen** manuell hinzufügen, also Paket
 2. **Kamera-Vermessung:** AR-Ansicht mit Anleitung, Ergebnis-Overlay und dem Button „Übernehmen“
 3. **Ergebnisliste** mit Karte für den Spar-Tipp ganz oben
 4. **Tarif-Detail:** Maße, Grenzen, Haftung, Abgabeoptionen, „Jetzt buchen“
-5. **Sendung hinzufügen:** Scanner, Einfügen, manuelle Eingabe
+5. **Abfrage der Sendungsnummer** (Bottom Sheet nach der Buchung) bzw. **Sendung hinzufügen**: Eingabe, Einfügen, Scanner
 6. **Sendungsdetail:** Zeitleiste, voraussichtliche Zustellung, Link zum Paketdienst
 7. **Premium-Seite**
 
@@ -304,8 +370,9 @@ Tarif          { carrier, produkt, kanal(online|filiale), preis, gueltig_ab,
                  regel{typ: gewicht|summe_laengste_kuerzeste|volumengewicht,
                        grenzen{…}}, max_gewicht, haftung, laufzeit }
 Paket          { l, b, h, gewicht, quelle(kamera|manuell), name? }
-Buchung        { id, tarif_ref, zeitpunkt, status(offen|nummer_erfasst|verworfen),
-                 affiliate_partner? }
+Buchung        { id, tarif_ref, carrier, zeitpunkt,
+                 status(offen|nummer_erfasst|verworfen|abgelaufen),
+                 erinnerungen_gesendet(0-2), affiliate_partner? }
 Sendung        { id, nummer, carrier, name?, richtung(ausgehend|eingehend),
                  status, ereignisse[], erwartete_zustellung?, buchung_ref?,
                  erstellt, zugestellt_am?, loeschen_am }
@@ -321,7 +388,7 @@ Nutzer         { geraete_id, push_token, premium(bool), login? }
 | **Ranking-Transparenz (§ 5b UWG)** | Seite „So vergleichen wir“ plus Kurzhinweis unter jeder Ergebnisliste |
 | **Werbekennzeichnung (§ 5a UWG)** | „Anzeige“ bzw. „Partner-Link“ sichtbar an Werbung und Affiliate-Buttons |
 | **Preisangaben (PAngV)** | Endpreise inkl. Mehrwertsteuer, Tarifstand, Hinweis auf mögliche Zuschläge |
-| **DSGVO und TTDSG** | Einwilligungs-Management (CMP) für Werbung, Tracking-Abfrage auf iOS (ATT), Auftragsverarbeitungsverträge mit Tracking- und Backend-Anbietern, Datenminimierung und Löschfristen (siehe 4.4) |
+| **DSGVO und TTDSG** | Einwilligungs-Management (CMP) für Werbung, Tracking-Abfrage auf iOS (ATT), Auftragsverarbeitungsverträge mit Tracking- und Backend-Anbietern, Datenminimierung und Löschfristen (siehe 4.5) |
 | **Markenrechte der Paketdienste** | Logos nur nach deren Markenrichtlinien, keine Anmutung einer offiziellen Partnerschaft, Hinweis „Paketlotse ist ein unabhängiger Vergleichsdienst“ |
 | **Haftung für Tarife** | Hinweis „Alle Angaben ohne Gewähr, maßgeblich sind die Bedingungen des Paketdienstes“ |
 | **Markenschutz Paketlotse** | Domains `.de`, `.com`, `.app` sichern, DPMA-Wortmarke in Klasse 9, 35, 39 anmelden (siehe Marktrecherche 10.6) |
@@ -364,7 +431,7 @@ Nutzer         { geraete_id, push_token, premium(bool), login? }
 |---|---|
 | Kamera-Vermessung ungenau, Nutzer müssen am Schalter nachzahlen | Aufschlag von 1 cm, Warnung nahe an Formatgrenzen, Hinweis zum Nachmessen, Feedback-Button |
 | Tarife veralten | Versionierte Tarife, jährlicher Tarif-Check plus Benachrichtigung bei Änderungen, Nutzer können Fehler melden |
-| Wenige Sendungsnummern werden nach externer Buchung erfasst | Fünf Wege der Erfassung (4.1), Erinnerung, einfacher Scan. Löst sich mit Phase 2 von selbst. |
+| Wenige Sendungsnummern werden nach externer Buchung erfasst | Abfrage bei Rückkehr mit Scan und Einfügen (4.2), zwei Erinnerungen, fünf Wege der Erfassung (4.1). Löst sich mit Phase 2 von selbst. |
 | Tracking-Kosten steigen mit der Nutzung | Obergrenze aktiver Sendungen, DHL über die kostenlose API, direkte APIs der Paketdienste prüfen |
 | DHL-Tracking-Kontingent (250 Abfragen pro Tag zum Start) | Rechtzeitig eine Erhöhung beantragen, abgestuftes Abfragen, Push-API nutzen |
 | Paketdienste zahlen keine Provision | Schwerpunkt auf Phase 2 (Label-Marge), direkte Kooperationen anfragen |

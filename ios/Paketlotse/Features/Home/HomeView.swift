@@ -101,7 +101,13 @@ struct HomeView: View {
             .navigationDestination(isPresented: $showResults) {
                 if let parcel { ResultsView(parcel: parcel, requirements: requirements) }
             }
-            .sheet(isPresented: $showMeasure) { MeasureComingSoonView() }
+            .fullScreenCover(isPresented: $showMeasure) {
+                MeasureScreen { measuredLength, measuredWidth, measuredHeight in
+                    length = Self.format(measuredLength)
+                    width = Self.format(measuredWidth)
+                    height = Self.format(measuredHeight)
+                }
+            }
         }
     }
 
@@ -222,28 +228,5 @@ struct MeasureField: View {
             .padding(.vertical, 12)
             .background(Theme.chip, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
         }
-    }
-}
-
-/// Platzhalter bis zur AR-Vermessung (ARKit/LiDAR) – nächster Entwicklungsschritt.
-struct MeasureComingSoonView: View {
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        VStack(spacing: 18) {
-            Image(systemName: "cube.transparent")
-                .font(.system(size: 64))
-                .foregroundStyle(Theme.primary)
-            Text("Kamera-Vermessung")
-                .font(.lotse(22, .bold))
-            Text("Stell deinen Karton auf eine ebene Fläche und tippe die Ecken an – Paketlotse misst Länge, Breite und Höhe. Die Bilder bleiben auf deinem Gerät.\n\nDiese Funktion ist in Arbeit.")
-                .font(.lotse(15))
-                .foregroundStyle(Theme.textSecondary)
-                .multilineTextAlignment(.center)
-            Button("Verstanden") { dismiss() }
-                .buttonStyle(PrimaryButtonStyle())
-        }
-        .padding(28)
-        .presentationDetents([.medium])
     }
 }

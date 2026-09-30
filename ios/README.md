@@ -37,6 +37,7 @@ ios/
 │   │   ├── TrackingNumberDetector   Sendungsnummer erkennen / normalisieren / aus Text extrahieren
 │   │   ├── Booking.swift            Offene Buchung + Abfrage-Regeln (60 s, 48 h, Erinnerungen)
 │   │   ├── Shipment.swift           Sendung, Status, Ereignisse
+│   │   ├── BoxMeasurement.swift     Rechenlogik der Kamera-Vermessung (Punkte → L × B × H)
 │   │   └── Resources/tarife-beispiel.json   ⚠️ BEISPIELPREISE
 │   └── Tests/PaketlotseCoreTests/
 └── Paketlotse/                      App (SwiftUI)
@@ -45,7 +46,8 @@ ios/
     ├── Components/                  Karten, Chips, Tags, Hero-Banner, Buttons
     ├── Services/                    AppStore (Zustand), Persistenz, Erinnerungen
     └── Features/
-        ├── Home/                    Maße eingeben, Schnellauswahl, Kamera (Platzhalter)
+        ├── Home/                    Maße eingeben, Schnellauswahl, Zusatzleistungen
+        ├── Measure/                 Kamera-Vermessung (ARKit + SceneKit)
         ├── Results/                 Ergebnisliste, Spar-Tipp, „Jetzt buchen“, „So vergleichen wir“
         ├── Shipments/               Sendungen, Abfrage der Sendungsnummer, Barcode-Scanner
         ├── Map/                     Karte (Platzhalter für Paketshops)
@@ -71,10 +73,16 @@ Orientiert an der Referenz „Job Finder UI Kit“:
 | Eintippen, Einfügen (PasteButton), Barcode-Scan (VisionKit) | ✅ |
 | Erinnerungen nach 2 h und am nächsten Morgen um 9 Uhr, „Nicht gebucht“ | ✅ |
 | Sendungsliste und Detailansicht, Link zum Paketdienst | ✅ |
-| Kamera-Vermessung (ARKit/LiDAR) | ⏳ Platzhalter |
+| **Kamera-Vermessung** (ARKit, Scene Depth auf LiDAR-Geräten): 3 Bodenecken + Deckel, Live-Wert, Sicherheitsaufschlag, Plausibilitätsprüfung | ✅ nur auf echtem iPhone |
 | Automatischer Tracking-Status und Push (Backend) | ⏳ |
 | Paketshop-Karte mit Daten | ⏳ |
 | Premium (StoreKit 2), Werbung, Affiliate-Links | ⏳ |
+
+## Kamera-Vermessung testen
+- Funktioniert **nur auf einem echten iPhone**, nicht im Simulator. Dort erscheint ein Hinweis.
+- iPhone per Kabel anschließen, in Xcode unter *Signing & Capabilities* dein Team auswählen, Gerät als Ziel wählen, dann ⌘R.
+- Ablauf: Karton auf den Boden stellen, iPhone kurz bewegen, drei untere Ecken mit + setzen, dann auf den Deckel zielen. Mit „Übernehmen“ landen die Werte in den Eingabefeldern.
+- Die Werte enthalten 1 cm Sicherheitsaufschlag und sind auf ganze cm aufgerundet.
 
 ## Wichtig vor einem Release
 - **Tarife:** `tarife-beispiel.json` enthält **Platzhalterpreise**. Vor dem Release mit den offiziellen Preislisten abgleichen und `isSample` auf `false` setzen.
@@ -84,6 +92,6 @@ Orientiert an der Referenz „Job Finder UI Kit“:
 ## Nächste Schritte
 1. In Xcode bauen, im Simulator testen, Kompilierfehler beheben. Der Code wurde ohne Xcode geschrieben und ist noch **nicht kompiliert**.
 2. Echte Tarifdaten der 6 Paketdienste einpflegen.
-3. AR-Vermessung mit ARKit (`ARWorldTrackingConfiguration`, auf LiDAR-Geräten mit Scene Depth)
+3. Kamera-Vermessung auf echten Geräten testen (mit und ohne LiDAR) und die Genauigkeit gegen einen Zollstock prüfen
 4. Backend: Sendungen registrieren (DHL Unified API und Tracking-Anbieter), Webhooks, Push über APNs
 5. StoreKit 2 für Premium, Affiliate-Links je Tarif

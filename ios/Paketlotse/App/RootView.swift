@@ -36,6 +36,7 @@ struct RootView: View {
             if phase == .active {
                 store.sceneDidBecomeActive()
                 store.purgeExpiredShipments(keepHistory: purchases.isPremium)
+                Task { await store.syncWithServer() }
                 Task { await purchases.updateEntitlements() }
             }
         }

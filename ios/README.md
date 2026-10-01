@@ -78,7 +78,7 @@ Orientiert an der Referenz „Job Finder UI Kit“:
 | Erinnerungen nach 2 h und am nächsten Morgen um 9 Uhr, „Nicht gebucht“ | ✅ |
 | Sendungsliste und Detailansicht, Link zum Paketdienst | ✅ |
 | **Kamera-Vermessung** (ARKit, Scene Depth auf LiDAR-Geräten): Länge, Breite und Höhe als getrennte Strecken, 3D-Anleitung vor jedem Schritt, Live-Wert, Sicherheitsaufschlag, Plausibilitätsprüfung | ✅ nur auf echtem iPhone |
-| Automatischer Tracking-Status und Push (Backend) | ⏳ |
+| **Automatischer Tracking-Status und Push** über das eigene Backend (`backend/`): Anmeldung der Sendung, Abgleich beim Start und per „Ziehen zum Aktualisieren“, Push bei Statuswechsel, Server-Daten löschen | ✅ |
 | **Paketshop-Karte** mit echten Standorten: DHL Location Finder (optional, API-Key) + OpenStreetMap für Hermes/DPD/GLS/UPS; Filter nach Paketdienst, Automaten, „Jetzt geöffnet“; Route | ✅ |
 | **Premium** (StoreKit 2, Einmalkauf 2,99 €): Paywall, Kaufen/Wiederherstellen, gespeicherte Paketgrößen, Versandverlauf & Kostenübersicht, unbegrenzter Sendungsverlauf | ✅ |
 | **Partnerlinks** (Affiliate, z. B. Awin): „Jetzt buchen“ über Partnerlink mit Klick-Referenz und Kennzeichnung, Anzeige-Karte für Partner-Portale | ✅ vorbereitet, IDs fehlen |
@@ -108,6 +108,18 @@ Orientiert an der Referenz „Job Finder UI Kit“:
   2. Einen In-App-Kauf vom Typ **Nicht-verbrauchbar** mit der Produkt-ID `de.paketlotse.app.premium` und 2,99 € anlegen, mit Anzeigename, Beschreibung und Screenshot für die Prüfung.
   3. Die Produkt-ID muss mit `PurchaseManager.premiumProductID` übereinstimmen.
 - **Was Premium freischaltet:** gespeicherte Paketgrößen (Startbildschirm → „Größe speichern“), den Versandverlauf mit Kosten pro Jahr (Profil) und einen unbegrenzten Sendungsverlauf. Werbefrei ist über `purchases.showsAds` vorbereitet, eine Werbe-SDK gibt es noch nicht.
+
+## Sendungsverfolgung mit dem Backend
+1. Backend lokal starten: `cd backend && npm install && USE_MOCK_PROVIDER=true npm run dev`. Mit dem Mock-Anbieter laufen Sendungen in ca. 6 Minuten bis „zugestellt“.
+2. In `ios/Config/Secrets.xcconfig` eintragen: `API_BASE_URL = http:/$()/localhost:8787`. Die Schreibweise mit `$()` ist nötig, weil `//` in xcconfig-Dateien einen Kommentar einleitet. Danach `./generate.sh` ausführen.
+3. Im **Simulator** starten, eine Sendungsnummer hinzufügen und nach einigen Minuten nach unten ziehen zum Aktualisieren.
+   - Auf einem **echten iPhone** ist `localhost` das iPhone selbst. Trag stattdessen die IP deines Macs ein, z. B. `http:/$()/192.168.178.20:8787`.
+4. **Push** braucht einen kostenpflichtigen Apple-Developer-Account:
+   - in `Secrets.xcconfig` die Zeile `CODE_SIGN_ENTITLEMENTS = Paketlotse/Push.entitlements` setzen
+   - im Backend die APNs-Variablen setzen (siehe `backend/README.md`)
+   - Push funktioniert nur auf echten Geräten.
+
+Ohne `API_BASE_URL` funktioniert die App wie bisher, nur ohne automatische Updates.
 
 ## Partnerlinks aktivieren
 Die Konfiguration steht in `PaketlotseCore/Sources/PaketlotseCore/Resources/partner-links.json`.

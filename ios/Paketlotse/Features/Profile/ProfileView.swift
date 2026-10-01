@@ -8,6 +8,7 @@ struct ProfileView: View {
     @State private var paywallReason: PaywallReason?
     @State private var showHistory = false
     @State private var showSavedParcels = false
+    @State private var confirmServerDeletion = false
 
     var body: some View {
         NavigationStack {
@@ -67,6 +68,12 @@ struct ProfileView: View {
                         }
                         Divider().padding(.leading, 52)
                         ProfileRow(title: "Datenschutz", systemImage: "hand.raised", action: nil)
+                        if store.api.isConfigured {
+                            Divider().padding(.leading, 52)
+                            ProfileRow(title: "Server-Daten löschen", systemImage: "trash") {
+                                confirmServerDeletion = true
+                            }
+                        }
                         Divider().padding(.leading, 52)
                         ProfileRow(title: "Impressum", systemImage: "info.circle", action: nil)
                     }
@@ -83,6 +90,17 @@ struct ProfileView: View {
             .navigationDestination(isPresented: $showHistory) { ShippingHistoryView() }
             .navigationDestination(isPresented: $showSavedParcels) { SavedParcelsView() }
             .sheet(isPresented: $showMethodology) { MethodologyView() }
+            .confirmationDialog(
+                "Alle Daten auf dem Paketlotse-Server löschen?",
+                isPresented: $confirmServerDeletion,
+                titleVisibility: .visible
+            ) {
+                Button("Löschen", role: .destructive) {
+                    Task { _ = await store.deleteServerData() }
+                }
+            } message: {
+                Text("Deine Sendungen bleiben auf dem iPhone, werden aber nicht mehr automatisch aktualisiert, bis du sie erneut verfolgst.")
+            }
             .sheet(item: $paywallReason) { reason in PaywallView(reason: reason.text) }
             .alert("Hinweis", isPresented: Binding(
                 get: { purchases.errorMessage != nil && paywallReason == nil },

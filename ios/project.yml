@@ -34,6 +34,12 @@ targets:
         NSCameraUsageDescription: "Paketlotse nutzt die Kamera, um Barcodes auf Versandlabels zu scannen und Pakete zu vermessen. Die Bilder werden nur auf deinem Gerät verarbeitet."
         NSLocationWhenInUseUsageDescription: "Paketlotse nutzt deinen Standort, um Paketshops und Packstationen in deiner Nähe zu zeigen. Er wird nicht gespeichert."
         DHLAPIKey: "$(DHL_API_KEY)"
+        PaketlotseAPIBaseURL: "$(API_BASE_URL)"
+        # Erlaubt HTTP nur für lokale Adressen (Backend-Entwicklung im Simulator)
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+        UIBackgroundModes:
+          - remote-notification
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: de.paketlotse.app

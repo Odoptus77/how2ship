@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 import Observation
 import PaketlotseCore
 
@@ -17,6 +18,11 @@ final class AppStore {
     let policy = TrackingPromptPolicy()
     @ObservationIgnored private let persistence = Persistence()
     @ObservationIgnored private let notifications = NotificationService()
+    /// Tracking-Backend (deaktiviert, solange `API_BASE_URL` leer ist).
+    @ObservationIgnored let api = TrackingAPI.fromInfoPlist()
+    @ObservationIgnored private var isSyncing = false
+    /// Letzter Fehler beim Abgleich mit dem Server (für einen dezenten Hinweis in der Liste).
+    private(set) var syncError: String?
     @ObservationIgnored private var lastPromptedBookingID: UUID?
 
     init() {
@@ -149,12 +155,112 @@ final class AppStore {
         }
         promptBooking = nil
         save()
-        // TODO: Sendung beim Paketlotse-Server registrieren (Tracking-Anbieter, Webhooks, Push).
-        Task { await notifications.requestAuthorizationIfNeeded() }
+        Task {
+            await registerOnServer(shipment.id)
+            // Erst nach der ersten Sendung nach Push-Erlaubnis fragen (Konzept 4.2).
+            if await notifications.requestAuthorizationIfNeeded() {
+                await MainActor.run { UIApplication.shared.registerForRemoteNotifications() }
+            }
+        }
     }
 
     func delete(_ shipment: Shipment) {
         shipments.removeAll { $0.id == shipment.id }
+        save()
+        if let serverID = shipment.serverID, api.isConfigured {
+            Task { try? await api.delete(id: serverID) }
+        }
+    }
+
+    // MARK: - Tracking-Backend
+
+    /// Sendung beim Server anmelden und ersten Stand übernehmen. Fehler sind nicht fatal –
+    /// beim nächsten Abgleich wird es erneut versucht.
+    func registerOnServer(_ shipmentID: UUID) async {
+        guard api.isConfigured,
+              let shipment = shipments.first(where: { $0.id == shipmentID }),
+              shipment.serverID == nil else { return }
+        do {
+            let dto = try await api.register(number: shipment.number, carrier: shipment.carrier, name: shipment.name)
+            updateShipment(shipmentID) { $0.apply(dto) }
+            syncError = nil
+        } catch {
+            syncError = error.localizedDescription
+        }
+    }
+
+    /// Abgleich beim App-Start, bei Push und per „Ziehen zum Aktualisieren“.
+    func syncWithServer() async {
+        guard api.isConfigured, !isSyncing else { return }
+        isSyncing = true
+        defer { isSyncing = false }
+
+        // Noch nicht angemeldete Sendungen nachholen (z. B. offline erfasst).
+        for shipment in shipments where shipment.serverID == nil && shipment.status != .delivered {
+            await registerOnServer(shipment.id)
+        }
+        do {
+            let remote = try await api.list()
+            let byID = Dictionary(remote.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+            for index in shipments.indices {
+                guard let serverID = shipments[index].serverID else { continue }
+                if let dto = byID[serverID] {
+                    shipments[index].apply(dto)
+                }
+                // Fehlt die Sendung auf dem Server (dort nach 30 Tagen gelöscht), bleibt sie lokal erhalten.
+            }
+            save()
+            syncError = nil
+        } catch {
+            syncError = error.localizedDescription
+        }
+    }
+
+    /// Einzelne Sendung sofort beim Paketdienst nachfragen.
+    func refresh(_ shipment: Shipment) async {
+        guard api.isConfigured else { return }
+        if shipment.serverID == nil { await registerOnServer(shipment.id) }
+        guard let serverID = shipments.first(where: { $0.id == shipment.id })?.serverID else { return }
+        do {
+            let dto = try await api.refresh(id: serverID)
+            updateShipment(shipment.id) { $0.apply(dto) }
+            syncError = nil
+        } catch {
+            syncError = error.localizedDescription
+        }
+    }
+
+    /// DSGVO: alle Daten dieses Geräts auf dem Server löschen. Lokale Sendungen bleiben erhalten,
+    /// werden aber nicht mehr automatisch aktualisiert.
+    func deleteServerData() async -> Bool {
+        guard api.isConfigured else { return true }
+        do {
+            try await api.deleteDevice()
+            DeviceCredentials.reset()
+            for index in shipments.indices { shipments[index].serverID = nil }
+            save()
+            return true
+        } catch {
+            syncError = error.localizedDescription
+            return false
+        }
+    }
+
+    /// Push-Token von APNs an den Server melden.
+    func updatePushToken(_ deviceToken: Data) {
+        guard api.isConfigured else { return }
+        let token = deviceToken.map { String(format: "%02x", $0) }.joined()
+        #if DEBUG
+        let sandbox = true
+        #else
+        let sandbox = false
+        #endif
+        Task { try? await api.setPushToken(token, sandbox: sandbox) }
+    }
+
+    private func updateShipment(_ id: UUID, _ change: (inout Shipment) -> Void) {
+        guard let index = shipments.firstIndex(where: { $0.id == id }) else { return }
+        change(&shipments[index])
         save()
     }
 

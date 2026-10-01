@@ -9,4 +9,12 @@ CODE_SIGN_STYLE = Automatic
 // DHL Location Finder – Unified API (https://developer.dhl.com). Leer = nur OpenStreetMap.
 DHL_API_KEY =
 
+// Tracking-Backend (siehe backend/README.md). Leer = Sendungsverfolgung nur lokal ohne automatische Updates.
+// Achtung: „//“ leitet in xcconfig einen Kommentar ein – daher „http:/$()/…“ schreiben.
+API_BASE_URL =
+
+// Push-Benachrichtigungen brauchen einen kostenpflichtigen Apple-Developer-Account.
+// Dann in Secrets.xcconfig setzen: CODE_SIGN_ENTITLEMENTS = Paketlotse/Push.entitlements
+CODE_SIGN_ENTITLEMENTS =
+
 #include? "Secrets.xcconfig"

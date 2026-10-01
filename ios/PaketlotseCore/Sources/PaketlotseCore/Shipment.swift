@@ -46,6 +46,11 @@ public struct Shipment: Codable, Identifiable, Hashable, Sendable {
     public var createdAt: Date
     public var deliveredAt: Date?
     public var bookingID: UUID?
+    /// ID beim Paketlotse-Server (nil = noch nicht angemeldet, z. B. offline oder ohne Backend).
+    public var serverID: String?
+    public var expectedDelivery: Date?
+    /// Letzte Statusänderung laut Server.
+    public var lastUpdated: Date?
 
     public init(
         id: UUID = UUID(), number: String, carrier: Carrier, name: String? = nil,
@@ -61,6 +66,19 @@ public struct Shipment: Codable, Identifiable, Hashable, Sendable {
         self.createdAt = createdAt
         self.deliveredAt = nil
         self.bookingID = bookingID
+    }
+
+    /// Übernimmt den Stand vom Server (Status, Ereignisse, Zustellung).
+    public mutating func apply(
+        serverID: String, status: ShipmentStatus, events: [TrackingEvent],
+        expectedDelivery: Date?, deliveredAt: Date?, lastUpdated: Date?
+    ) {
+        self.serverID = serverID
+        self.status = status
+        self.events = events.sorted { $0.date > $1.date }
+        self.expectedDelivery = expectedDelivery
+        self.deliveredAt = deliveredAt ?? (status == .delivered ? self.deliveredAt ?? Date() : nil)
+        self.lastUpdated = lastUpdated
     }
 
     public var displayName: String {

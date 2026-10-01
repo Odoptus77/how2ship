@@ -25,7 +25,24 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         UNUserNotificationCenter.current().delegate = self
+        // Push-Token erneuern, falls Mitteilungen schon erlaubt sind (Token kann sich ändern).
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            guard settings.authorizationStatus == .authorized || settings.authorizationStatus == .provisional else { return }
+            DispatchQueue.main.async { application.registerForRemoteNotifications() }
+        }
         return true
+    }
+
+    private func syncFromPush() async {
+        await store.syncWithServer()
+    }
+
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        store.updatePushToken(deviceToken)
+    }
+
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        // Ohne Push-Entitlement (kostenloser Apple-Account) oder im Simulator – App funktioniert weiter ohne Push.
     }
 
     nonisolated func userNotificationCenter(
@@ -33,6 +50,11 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         didReceive response: UNNotificationResponse
     ) async {
         let userInfo = response.notification.request.content.userInfo
+        if userInfo["shipmentId"] != nil {
+            // Push vom Tracking-Server angetippt → aktuellen Stand holen.
+            await syncFromPush()
+            return
+        }
         guard let idString = userInfo[NotificationService.bookingIDKey] as? String,
               let bookingID = UUID(uuidString: idString) else { return }
         await MainActor.run {
@@ -44,6 +66,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
-        [.banner, .sound]
+        if notification.request.content.userInfo["shipmentId"] != nil {
+            await syncFromPush()
+        }
+        return [.banner, .sound]
     }
 }

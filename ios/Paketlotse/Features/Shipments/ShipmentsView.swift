@@ -44,6 +44,7 @@ struct ShipmentsView: View {
             }
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
+            .refreshable { await store.syncWithServer() }
             .background(Theme.background.ignoresSafeArea())
             .navigationTitle("Sendungen")
             .navigationDestination(for: Shipment.self) { ShipmentDetailView(shipment: $0) }
@@ -152,9 +153,18 @@ struct StatusTag: View {
 }
 
 struct ShipmentDetailView: View {
-    let shipment: Shipment
+    private let initial: Shipment
 
     @Environment(AppStore.self) private var store
+
+    init(shipment: Shipment) {
+        initial = shipment
+    }
+
+    /// Immer den aktuellen Stand aus dem Store zeigen (Updates vom Server).
+    private var shipment: Shipment {
+        store.shipments.first { $0.id == initial.id } ?? initial
+    }
     @Environment(\.openURL) private var openURL
     @Environment(\.dismiss) private var dismiss
 
@@ -192,14 +202,26 @@ struct ShipmentDetailView: View {
                         Spacer()
                         StatusTag(status: shipment.status)
                     }
+                    if let expected = shipment.expectedDelivery, shipment.status != .delivered {
+                        Label("Voraussichtlich \(expected.formatted(date: .abbreviated, time: .omitted))", systemImage: "calendar")
+                            .font(.lotse(14, .semibold))
+                            .foregroundStyle(Theme.primary)
+                    }
                     if shipment.events.isEmpty {
-                        Text("Die automatische Statusabfrage folgt mit dem Paketlotse-Server. Bis dahin kannst du den Status direkt beim Paketdienst ansehen.")
+                        Text(store.api.isConfigured
+                             ? "Noch keine Meldungen vom Paketdienst. Viele Sendungen erscheinen erst nach der Einlieferung – wir sagen dir Bescheid."
+                             : "Automatische Statusabfrage ist nicht eingerichtet. Du kannst den Status direkt beim Paketdienst ansehen.")
                             .font(.lotse(14))
                             .foregroundStyle(Theme.textSecondary)
                     } else {
                         ForEach(shipment.events.sorted { $0.date > $1.date }, id: \.self) { event in
                             TimelineRow(event: event)
                         }
+                    }
+                    if let updated = shipment.lastUpdated {
+                        Text("Letzte Änderung: \(updated.formatted(date: .abbreviated, time: .shortened))")
+                            .font(.lotse(11))
+                            .foregroundStyle(Theme.textSecondary)
                     }
                 }
                 .card()
@@ -218,6 +240,7 @@ struct ShipmentDetailView: View {
             }
             .padding(Theme.padding)
         }
+        .refreshable { await store.refresh(shipment) }
         .background(Theme.background.ignoresSafeArea())
         .navigationTitle("Sendung")
         .navigationBarTitleDisplayMode(.inline)
